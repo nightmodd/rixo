@@ -1,0 +1,77 @@
+.input_container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+
+
+    input {
+        margin: 0 0 1rem;
+        background: white;
+        border: 1px solid #a8472f;
+        display: block;
+        font-weight: 400;
+        font-size: 1rem;
+        color: #0b853e;
+
+        letter-spacing: .04em;
+        padding: 1.0625rem 16px 7px;
+        outline: none;
+        cursor: text;
+        transition: all 0.3s ease-in-out;
+
+
+
+
+        &:valid+label,
+        &:focus+label
+         {
+            font-size: 0.55rem;
+            top: 0.4rem;
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    label {
+        position: absolute;
+        text-transform: uppercase;
+        top: 0.5rem;
+        left: 1rem;
+        color: #a8472f;
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: all 0.3s ease-in-out;
+
+
+    }
+
+    .error {
+        color: red;
+        background: rgba(234, 171, 171, 0.466);
+    }
+    .valid{
+        background: rgba(171, 234, 171, 0.466);
+    }
+
+    .statusImg {
+        position: absolute;
+        top: 0.7rem;
+        right: 1rem;
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+  .errorMsg {
+        margin-bottom: 0;
+        position: absolute;
+        color: red;
+        font-size: 0.7rem;
+        top: 2.5rem;
+        left: 0.5rem;
+    }
+
+
+}

@@ -1,0 +1,20 @@
+.button {
+
+    background-color: #a8472f;
+    border: 1px solid #a8472f;
+    color: #ffffff;
+    width: 100%;
+    padding: 0.7rem 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        background-color: #ffffff;
+        color: #a8472f;
+        cursor: pointer;
+        border: 1px solid #a8472f;
+    }
+}
