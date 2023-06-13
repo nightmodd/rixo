@@ -1,30 +1,35 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import RootLayout from './routes/Root';
-import ErrorPage from './routes/Error';
-import HomePage from './routes/Home';
-import LoginPage from './routes/Login';
-import RegisterPage from './routes/Register';
-
-import './App.css';
+import { AuthContextProvider } from './context/auth-context';
+import RootLayout from './routes/root';
+import ErrorPage from './routes/error';
+import HomePage from './routes/home';
+import LoginPage from './routes/login';
+import RegisterPage from './routes/register';
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <RootLayout />,
         errorElement: <ErrorPage />,
-        children: [{ index: true, element: <HomePage /> }],
-    },
-    {
-        path: 'Login',
-        element: <LoginPage />,
-    },
-    {
-        path: 'Register',
-        element: <RegisterPage />,
+        children: [
+            { index: true, element: <HomePage /> },
+            {
+                path: '/Login',
+                element: <LoginPage />,
+            },
+            {
+                path: '/Register',
+                element: <RegisterPage />,
+            },
+        ],
     },
 ]);
 function App() {
-    return <RouterProvider router={router}></RouterProvider>;
+    return (
+        <AuthContextProvider>
+            <RouterProvider router={router}></RouterProvider>
+        </AuthContextProvider>
+    );
 }
 
 export default App;

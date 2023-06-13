@@ -2,31 +2,24 @@
     position: relative;
     width: 100%;
     display: flex;
-    flex-direction: column;
-
-
 
     input {
-        margin: 0 0 1rem;
-        background: white;
+        width: 100%;
+        margin-bottom: 1rem;
         border: 1px solid #a8472f;
+        background: #fffcee;
         display: block;
         font-weight: 400;
         font-size: 1rem;
         color: #0b853e;
-
-        letter-spacing: .04em;
-        padding: 1.0625rem 16px 7px;
+        letter-spacing: 0.04em;
+        padding: 1.0625rem 1rem 0.4375rem;
         outline: none;
         cursor: text;
         transition: all 0.3s ease-in-out;
 
-
-
-
-        &:valid+label,
-        &:focus+label
-         {
+        &:focus + label,
+        &:user-valid + label {
             font-size: 0.55rem;
             top: 0.4rem;
             margin-bottom: 0.5rem;
@@ -36,24 +29,26 @@
     label {
         position: absolute;
         text-transform: uppercase;
-        top: 0.5rem;
+        display: block;
+        top: 0.7rem;
         left: 1rem;
         color: #a8472f;
-        display: flex;
-        align-items: center;
         font-size: 0.9rem;
         font-weight: 600;
         transition: all 0.3s ease-in-out;
-
-
     }
 
     .error {
         color: red;
         background: rgba(234, 171, 171, 0.466);
     }
-    .valid{
+
+    .valid {
         background: rgba(171, 234, 171, 0.466);
+    }
+
+    .neutral {
+        background: #fffcee;
     }
 
     .statusImg {
@@ -64,7 +59,7 @@
         height: 1.5rem;
     }
 
-  .errorMsg {
+    .errorMsg {
         margin-bottom: 0;
         position: absolute;
         color: red;
@@ -72,6 +67,13 @@
         top: 2.5rem;
         left: 0.5rem;
     }
+}
 
+.error {
+    background: rgba(234, 171, 171, 0.466);
+    color: red;
+}
 
+.valid {
+    background: rgba(171, 234, 171, 0.466);
 }
