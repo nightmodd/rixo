@@ -10,7 +10,7 @@ import Input from '../UI/input';
 import Button from '../UI/button';
 
 import styles from './auth-pages.module.scss';
-import classes from '../UI/input.module.scss';
+
 
 type FormData = {
     name: string;
@@ -121,11 +121,11 @@ const RegisterPage = () => {
     return (
         <div className={styles.outer_container}>
             <div className={styles.inner_container}>
-                <span> Register</span>
+                <span className={styles.span}> Register</span>
                 <p>Please enter your details </p>
                 <RegisterForm />
 
-                <div className={styles.register}>
+                <div className={styles.navigation}>
                     <span>
                         Already have an account?{' '}
                         <Link to="/Login" className={styles.link}>
