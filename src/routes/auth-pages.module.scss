@@ -1,13 +1,15 @@
 .outer_container {
-    position: relative;
+    position: fixed;
     width: 100vw;
     height: 70vh;
-    margin-top: 6vh;
+    top: 3.2rem;
+    left: 0;
+    min-height: 30rem;
+
     background-image: url('//cdn.shopify.com/s/files/1/0327/1609/5533/files/account-top-left_375x.png?v=1672932330');
     background-size: 130px;
     background-repeat: no-repeat;
     background-position: top left;
-    border-top: solid 5px #000000;
     border-bottom: solid 5px #000000;
 
     &::before {
@@ -42,9 +44,9 @@
         margin: 1rem auto;
     }
 
-    span {
+    .span {
         margin-bottom: 0.5rem;
-        font-family: 'Bradford LL TT', serif;
+        font-family: var(--font-serif);
         font-size: 3rem;
         font-weight: 300;
         line-height: 3.625rem;
@@ -59,21 +61,20 @@
         color: #a8472f;
     }
 
-    .register {
+    .navigation {
         margin-top: 1.5rem;
 
         span {
             color: black;
-            font-size: 1rem;
+            font-size: 0.8rem;
             letter-spacing: 0.06em;
-            line-height: 1.375rem;
 
             .link {
                 text-decoration: none;
                 border-bottom: solid 1px;
                 color: #000;
                 cursor: pointer;
-                font-size: 1rem;
+                font-size: 0.8rem;
                 font-weight: 400;
                 letter-spacing: 0.06em;
                 position: relative;
@@ -98,5 +99,14 @@
     .inner_container span {
         font-size: 4.5rem;
         line-height: 4.625rem;
+    }
+
+    .navigation {
+        span {
+            font-size: 1rem;
+            .link {
+                font-size: 1rem;
+            }
+        }
     }
 }

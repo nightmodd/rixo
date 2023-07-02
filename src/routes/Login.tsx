@@ -9,7 +9,7 @@ import Input from '../UI/input';
 import Button from '../UI/button';
 
 import styles from './auth-pages.module.scss';
-import classes from '../UI/input.module.scss';
+
 
 type FormData = {
     email: string;
@@ -97,11 +97,11 @@ const LoginPage = () => {
     return (
         <div className={styles.outer_container}>
             <div className={styles.inner_container}>
-                <span>Login</span>
+                <span className={styles.span}>Login</span>
                 <p>Please enter you login and password </p>
                 <LoginForm />
 
-                <div className={styles.register}>
+                <div className={styles.navigation}>
                     <span>
                         Don't have an account?{' '}
                         <Link to="/Register" className={styles.link}>

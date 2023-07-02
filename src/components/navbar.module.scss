@@ -1,24 +1,272 @@
-.navbar {
-    background-color: #918a8a;
-    color: #870808;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 600;
-    padding: 0.5rem 1rem;
+.header {
+    z-index: 2;
+    position: relative;
+    width: 100%;
+    height: 2.7rem;
+}
+
+.mobile_nav {
+    transform: translateX(-200%);
+}
+.desktop_nav {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 100;
+    height: 2.7rem;
+    border-bottom: 3px solid #000;
+    z-index: 50;
+
+    .backdrop {
+        position: fixed;
+        top: 2.7rem;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    ul {
+        margin: auto;
+        max-width: 65rem;
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        li {
+            font-size: 1rem;
+
+            a {
+                text-decoration: none;
+                color: #000;
+                background: transparent;
+                cursor: pointer;
+                padding: 0.5rem 1rem;
+                display: block;
+            }
+            &:hover .backdrop,
+            &:focus .backdrop {
+                transform: translatex(0);
+            }
+            &:hover .backdrop + .dropdown,
+            &:focus .backdrop + .dropdown {
+                transform: translatex(0);
+            }
+        }
+    }
 }
 
-ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+.dropdown {
+    position: absolute;
+    left: 0;
+    top: 2.7rem;
+    width: 100vw;
+    height: 50vh;
+    min-height: 20rem;
+    padding: 1rem 5rem;
     display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background-color: #fffcee;
+    background-image: url('//cdn.shopify.com/s/files/1/0327/1609/5533/files/account-top-left_375x.png?v=1672932330');
+    background-size: 110px;
+    background-repeat: no-repeat;
+    background-position: top left;
+    transition: transform 0.3 ease-in-out;
+
+    &::before {
+        content: '';
+        position: absolute;
+        background: url('//cdn.shopify.com/s/files/1/0327/1609/5533/files/account-bottom-right_375x.png?v=1672932330')
+            0 0 no-repeat;
+        width: 100%;
+        height: 45%;
+        z-index: -1;
+        bottom: 0;
+        left: 0;
+        background-position: right bottom;
+        background-size: 140px;
+        transform: rotatex(180deg);
+    }
+
+    .sub_menu {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        margin: 0;
+        margin-right: 2rem;
+
+        h3 {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        li {
+            margin-bottom: 0.2rem;
+
+            a {
+                font-size: 0.8rem;
+                cursor: pointer;
+                margin: 0;
+                margin-bottom: 0.3rem;
+                padding: 0;
+            }
+        }
+    }
 }
 
-li {
-    margin-inline: 0.5rem;
+.hidden {
+    transform: translateX(100%);
+}
+
+@media screen and (max-width: 1200px) {
+    .dropdown {
+        padding: 1rem 2rem;
+        .sub_menu {
+            margin-right: 1rem;
+        }
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .desktop_nav {
+        transform: translatex(-300%);
+    }
+    .mobile_nav {
+        display: block;
+        position: fixed;
+        top: 0;
+        right: 0;
+
+        .hamburger {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 2rem;
+            height: 2rem;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 1.3rem;
+            margin: 1rem;
+            padding: 0.2rem;
+            transition: 0.3s ease-in-out;
+            &:hover {
+                transform: scale(1.2);
+            }
+        }
+
+        .mobile_backdrop {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 20;
+            background-color: rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease-in-out;
+        }
+        .mobile_links {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 40%;
+            min-width: 16rem;
+            height: 100vh;
+            z-index: 30;
+            background-color: #fffcee;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 4rem 0 0 1rem;
+            transition: transform 0.3s ease-in-out;
+        }
+    }
+
+    .mobile_links li button {
+        font-size: 1rem;
+        text-decoration: none;
+        color: #000;
+        background: transparent;
+        cursor: pointer;
+        border: none;
+        margin-bottom: 0.5rem;
+        &:hover {
+            color: #a8472f;
+        }
+    }
+
+    .submenus_container {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 100%;
+        padding: 4rem 0 0 1rem;
+        display: flex;
+        flex-direction: column;
+        overflow-y: scroll;
+        background-color: #fffcee;
+        scroll-behavior: smooth;
+        transition: transform 0.3s ease-in-out;
+        transform: translateX(0);
+        z-index: 50;
+
+        &.mobile_hidden {
+            transform: translateX(200%);
+        }
+
+        .back_button {
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            font-weight: light;
+            text-transform: capitalize;
+            text-align: left;
+
+            &:hover {
+                i {
+                    color: #a8472f;
+                    transform: translateX(-0.2rem);
+                    transition: transform 0.2s ease-in-out;
+                }
+            }
+        }
+    }
+
+    .submenu_mobile {
+        position: relative;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        margin: 0;
+        margin-bottom: 1rem;
+
+        h5 {
+            font-size: 0.8rem;
+            margin-bottom: 0.1rem;
+        }
+
+        li a {
+            font-size: 0.7rem;
+            margin-bottom: 0.2rem;
+            color: #000;
+            &:hover {
+                color: #a8472f;
+            }
+        }
+    }
+
+    .opened {
+        transform: translateX(0);
+    }
+    .closed {
+        transform: translateX(100%);
+    }
 }
