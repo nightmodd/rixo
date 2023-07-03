@@ -5,7 +5,6 @@ import ErrorPage from './routes/error';
 import HomePage from './routes/home';
 import LoginPage from './routes/login';
 import RegisterPage from './routes/register';
-import { ContextProvider } from './context/context';
 
 const router = createBrowserRouter([
     {
@@ -27,11 +26,9 @@ const router = createBrowserRouter([
 ]);
 function App() {
     return (
-        <ContextProvider>
-            <AuthContextProvider>
-                <RouterProvider router={router}></RouterProvider>
-            </AuthContextProvider>
-        </ContextProvider>
+        <AuthContextProvider>
+            <RouterProvider router={router}></RouterProvider>
+        </AuthContextProvider>
     );
 }
 
