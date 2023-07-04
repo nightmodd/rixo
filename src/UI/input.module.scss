@@ -1,79 +1,79 @@
 .input_container {
-    position: relative;
+  position: relative;
+  width: 100%;
+  display: flex;
+
+  input {
     width: 100%;
-    display: flex;
+    margin-bottom: 1rem;
+    border: 1px solid #a8472f;
+    background: #fffcee;
+    display: block;
+    font-weight: 400;
+    font-size: 1rem;
+    color: #0b853e;
+    letter-spacing: 0.04em;
+    padding: 1.0625rem 1rem 0.4375rem;
 
-    input {
-        width: 100%;
-        margin-bottom: 1rem;
-        border: 1px solid #a8472f;
-        background: #fffcee;
-        display: block;
-        font-weight: 400;
-        font-size: 1rem;
-        color: #0b853e;
-        letter-spacing: 0.04em;
-        padding: 1.0625rem 1rem 0.4375rem;
-        
-        cursor: text;
-        transition: all 0.3s ease-in-out;
+    cursor: text;
+    transition: all 0.3s ease-in-out;
 
-        &:focus + label,
-        &:user-valid + label {
-            font-size: 0.55rem;
-            top: 0.4rem;
-            margin-bottom: 0.5rem;
-        }
+    &:focus + label,
+    &:user-valid + label {
+      font-size: 0.55rem;
+      top: 0.4rem;
+      margin-bottom: 0.5rem;
     }
+  }
 
-    label {
-        position: absolute;
-        text-transform: uppercase;
-        display: block;
-        top: 0.7rem;
-        left: 1rem;
-        color: #a8472f;
-        font-size: 0.9rem;
-        font-weight: 600;
-        transition: all 0.3s ease-in-out;
-    }
+  label {
+    position: absolute;
+    text-transform: uppercase;
+    display: block;
+    top: 0.7rem;
+    left: 1rem;
+    color: #a8472f;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+  }
 
-    .error {
-        color: red;
-        background: rgba(234, 171, 171, 0.466);
-    }
+  .error {
+    color: red;
+    background: rgba(234, 171, 171, 0.466);
+  }
 
-    .valid {
-        background: rgba(171, 234, 171, 0.466);
-    }
+  .valid {
+    background: rgba(171, 234, 171, 0.466);
+  }
 
-    .neutral {
-        background: #FFFCEE;
-    }
+  .neutral {
+    background: #fffcee;
+  }
 
-    .statusImg {
-        position: absolute;
-        top: 0.7rem;
-        right: 1rem;
-        width: 1.5rem;
-        height: 1.5rem;
-    }
+  .statusImg {
+    position: absolute;
+    top: 0.7rem;
+    right: 1rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
 
-    .errorMsg {
-        margin-bottom: 0;
-        position: absolute;
-        color: red;
-        font-size: 0.7rem;
-        top: 2.5rem;
-        left: 0.5rem;
-    }
+  .errorMsg {
+    margin-bottom: 0;
+    position: absolute;
+    color: red;
+    font-size: 0.7rem;
+    top: 2.5rem;
+    left: 0.5rem;
+  }
 }
 
 .error {
-    background: rgba(234, 171, 171, 0.466);
-    color: red;
+  background: rgba(234, 171, 171, 0.466);
+  color: red;
 }
 
 .valid {
-    background: rgba(171, 234, 171, 0.466);
+  background: rgba(171, 234, 171, 0.466);
 }

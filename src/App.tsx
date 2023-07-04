@@ -7,29 +7,29 @@ import LoginPage from './routes/login';
 import RegisterPage from './routes/register';
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <RootLayout />,
-        errorElement: <ErrorPage />,
-        children: [
-            { index: true, element: <HomePage /> },
-            {
-                path: '/Login',
-                element: <LoginPage />,
-            },
-            {
-                path: '/Register',
-                element: <RegisterPage />,
-            },
-        ],
-    },
+  {
+    path: '/',
+    element: <RootLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      { index: true, element: <HomePage /> },
+      {
+        path: '/Login',
+        element: <LoginPage />,
+      },
+      {
+        path: '/Register',
+        element: <RegisterPage />,
+      },
+    ],
+  },
 ]);
 function App() {
-    return (
-        <AuthContextProvider>
-            <RouterProvider router={router}></RouterProvider>
-        </AuthContextProvider>
-    );
+  return (
+    <AuthContextProvider>
+      <RouterProvider router={router}></RouterProvider>
+    </AuthContextProvider>
+  );
 }
 
 export default App;
