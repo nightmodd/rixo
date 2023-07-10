@@ -6,7 +6,7 @@ import Button from '../UI/button';
 
 import styles from './home.module.scss';
 
-const HomePage = () => {
+const HomePage: React.FC = () => {
   const { currentUser, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   let comingUser: string;

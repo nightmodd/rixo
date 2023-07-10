@@ -17,6 +17,7 @@ interface DropdownLink {
   featured?: Featured[];
 }
 
+
 const dropdownLinks: DropdownLink[] = [
   {
     title: 'New In',
@@ -554,6 +555,9 @@ const MainNavigation = () => {
   const backdropMobile = document.querySelector(`.${styles.mobile_backdrop}`);
 
   //handling on Click events
+  //shofha b3deen enhancment
+  
+
   const closeAll = () => {
     setShowMobileMenu(false);
     menu?.classList.remove(styles.opened);
