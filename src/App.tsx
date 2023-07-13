@@ -25,6 +25,7 @@ const router = createBrowserRouter([
       {
         path: '/collections/:id',
         element: <Products />,
+       
       },
     ],
   },

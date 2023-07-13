@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { collection, getDocs } from 'firebase/firestore';
+import {
+  collection,
+  getDocs,
+  query,
+  startAfter,
+  limit,
+  orderBy,
+} from 'firebase/firestore';
 import { db } from '../config/firebase-config';
 
 import bagImage from '../assets/shopping_bag.svg';
 import styles from './products.module.scss';
-import { set } from 'react-hook-form';
 
 //dummy data
 const products = [
@@ -509,40 +515,22 @@ const relatedProducts = [
 
 //interfaces
 interface ProductBase {
+  find(arg0: (product: ProductBase) => boolean): ProductBase;
+  map(
+    arg0: (product: ProductBase) => import('react/jsx-runtime').JSX.Element
+  ): React.ReactNode;
   id: string;
   name: string;
-  type: string;
+  type?: string;
   price: string;
   sizes: Size[];
   images: string[];
-}
-
-interface Product extends ProductBase {
-  description: string;
   currency: string;
-  category: string;
-  details: Details;
-  related: Product[];
-  style_with: Product[];
-  variants: Variant[];
 }
-
 interface Size {
   value: string;
   quantity: number;
 }
-
-interface Details {
-  fit: string;
-  fabric: string;
-  inspiration: string;
-}
-
-interface Variant {
-  name: string;
-  id: string;
-}
-
 interface mobileData {
   sizes: Size[];
   price: string;
@@ -553,26 +541,65 @@ interface mobileData {
 const Products: React.FC = () => {
   const { id } = useParams();
 
-  const [renderedProducts, setProducts] = useState(products);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const loadingAnimation = useRef(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [mobileData, setMobileData] = useState<mobileData>();
+  const [renderedProducts, setProducts] = useState([]);
+
+  let lastVisible: any = null;
 
   useEffect(() => {
-    const getProducts = async () => {
-      const productsCollection = collection(db, id!);
+    if (loadingAnimation.current === null) return;
+
+    const observer = new IntersectionObserver((entries: any) => {
+      entries.forEach((entry: any) => {
+        if (entry.isIntersecting && isLoading) {
+          fetchMoreData();
+        }
+      });
+    }, {});
+
+    const loading = loadingAnimation.current!;
+    // observerIntersection
+
+    const getFirstProducts = async () => {
+      const productsCollection = query(collection(db, id!), limit(6));
       const data = await getDocs(productsCollection);
-      setIsLoading(true);
+
       if (!data.empty) {
-        setProducts(data.docs.map((doc) => doc.data()));
+        const fetchedProducts = data.docs.map((doc) => doc.data());
+        setProducts(fetchedProducts);
+        lastVisible = data.docs[data.docs.length - 1];
       } else {
         setProducts(products);
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
-    getProducts();
+
+    observer.observe(loading);
+    getFirstProducts();
+
+    return () => {
+      observer.disconnect();
+    };
   }, [id]);
 
-  
+  const fetchMoreData = async () => {
+    const nextProductsCollection = query(
+      collection(db, id!),
+      startAfter(lastVisible),
+      limit(6)
+    );
+    const data = await getDocs(nextProductsCollection);
+    if (data.docs.length !== 0) {
+      const fetchedProducts = data.docs.map((doc) => doc.data());
+      setProducts((prevProducts: any) => [...prevProducts, ...fetchedProducts]);
+      lastVisible = data.docs[data.docs.length - 1];
+    } else {
+      setIsLoading(false);
+    }
+  };
+
   const resetSizeButtons = () => {
     const sizeButtons = document.querySelectorAll(`.${styles.size}`) as any;
     sizeButtons.forEach((button: HTMLButtonElement) => {
@@ -580,23 +607,19 @@ const Products: React.FC = () => {
       button.style.backgroundColor = 'transparent';
     });
   };
-
   //for desktop
   const mouseLeave = (event: any) => {
     const productSizes = event.target.parentElement
       .firstChild as HTMLDivElement;
-    const sizeButtons = document.querySelectorAll(`.${styles.size}`) as any;
     const addToCartSection = productSizes.nextElementSibling as HTMLDivElement;
     const addToCartSectionHeight = addToCartSection.clientHeight;
+    const height = addToCartSectionHeight - 2;
 
-    if (productSizes.style.bottom === `${addToCartSectionHeight}px`) {
+    if (productSizes.style.bottom === `${height}px`) {
       productSizes.style.bottom = '0';
 
-      addToCartSection.style.transform = 'translateY(200%)';
-      sizeButtons.forEach((button: HTMLButtonElement) => {
-        button.style.border = 'none';
-        button.style.backgroundColor = 'transparent';
-      });
+      addToCartSection.style.transform = 'translateY(100%)';
+      resetSizeButtons();
     }
   };
 
@@ -604,8 +627,9 @@ const Products: React.FC = () => {
     const productSizes = event.target.parentElement as HTMLDivElement;
     const addToCartSection = event.target.parentElement.nextElementSibling;
     const addToCartSectionHeight = addToCartSection.clientHeight;
+    const height = addToCartSectionHeight - 2;
 
-    productSizes.style.bottom = `${addToCartSectionHeight}px`;
+    productSizes.style.bottom = `${height}px `;
     addToCartSection.style.transform = 'translateY(0)';
 
     resetSizeButtons();
@@ -638,11 +662,11 @@ const Products: React.FC = () => {
       `.${styles.mobile_cart}`
     ) as HTMLDivElement;
     const ID = event.target.parentElement.getAttribute('data-id');
-    const productWholeData = renderedProducts.find(
-      (product) => product.id === ID
+    const productWholeData: ProductBase = renderedProducts.find(
+      (product: ProductBase) => product.id === ID
     );
 
-    const mobileProductData = {
+    const mobileProductData: mobileData = {
       sizes: productWholeData?.sizes,
       price: productWholeData?.price,
       currency: productWholeData?.currency,
@@ -680,8 +704,9 @@ const Products: React.FC = () => {
 
   const showMobileCart = (event: any) => {
     const quantity = event.target.getAttribute('data-quantity');
-    console.log(quantity);
     resetSizeButtons();
+
+    event.target.style.backgroundColor = '#f0daeccd';
     const mobileCartSection = document.querySelector(
       `.${styles.mobile_cart}`
     ) as HTMLDivElement;
@@ -690,23 +715,18 @@ const Products: React.FC = () => {
     const mobileAddToCartButton =
       mobileCartSection.lastChild as HTMLButtonElement;
 
-    if (quantity === 0) {
+    if (quantity == 0) {
       event.target.style.border = '1px solid #ff0000';
-      event.target.parentElement.lastChild.style.textDecorationColor =
-        '#ff0000';
-      Span.textContent = `Out of stock`;
+      Span.textContent = 'Out of stock';
       Span.style.textDecorationColor = '#ff0000';
       mobileAddToCartButton.textContent = 'Join Waitlist';
     } else if (quantity < 3 && quantity !== 0) {
       event.target.style.border = '1px solid #ebba3c';
-      event.target.parentElement.lastChild.style.textDecorationColor =
-        '#ebba3c';
       Span.textContent = `only ${quantity} left in stock`;
       Span.style.textDecorationColor = '#ebba3c';
       mobileAddToCartButton.textContent = 'Add to Bag';
     } else if (quantity > 3) {
       event.target.style.border = '1px solid green';
-      event.target.parentElement.lastChild.style.textDecorationColor = 'green';
       Span.textContent = `In Stock`;
       Span.style.textDecorationColor = 'green';
       mobileAddToCartButton.textContent = 'Add to Bag';
@@ -714,7 +734,7 @@ const Products: React.FC = () => {
   };
 
   return (
-    <div className={styles.main_content}>
+    <div className={styles.main_content} key={id}>
       <div className={styles.upper_section}>
         <div className={styles.header}>
           <div className={styles.header_left}>
@@ -736,85 +756,81 @@ const Products: React.FC = () => {
         </ul>
       </div>
 
-      {!isLoading && (
-        <div className={styles.lower_section}>
-          <div className={styles.filter_section}></div>
-          <div className={`${styles.products_section} ${styles.grid_4} `}>
-            {renderedProducts.map((product) => (
-              <div className={styles.product_card} key={product.id}>
-                <div className={styles.product_upper_container}>
-                  <Link to={'/'} className={styles.product_images}>
-                    <img
-                      src={product.images[0]}
-                      alt="product"
-                      className={`${styles.images}`}
-                    />
-                    <img
-                      src={product.images[1]}
-                      alt="product"
-                      className={`${styles.hidden_img} ${styles.images}`}
-                    />
-                  </Link>
-                  <div
-                    className={styles.hover_animation}
-                    onMouseLeave={(e) => {
-                      mouseLeave(e);
-                    }}
-                  >
-                    <div className={styles.product_sizes}>
-                      {product.sizes.map((size) => (
-                        <button
-                          onClick={(event) =>
-                            showAddToCart(event, size.quantity)
-                          }
-                          key={size.value}
-                          className={`${styles.size}
+      <div className={styles.lower_section}>
+        <div className={styles.filter_section}></div>
+        <div className={`${styles.products_section} ${styles.grid_4} `}>
+          {renderedProducts.map((product: ProductBase) => (
+            <div className={styles.product_card} key={product.id}>
+              <div className={styles.product_upper_container}>
+                <Link to={'/'} className={styles.product_images}>
+                  <img
+                    src={product.images[0]}
+                    alt="product"
+                    className={`${styles.images}`}
+                  />
+                  <img
+                    src={product.images[1]}
+                    alt="product"
+                    className={`${styles.hidden_img} ${styles.images}`}
+                  />
+                </Link>
+                <div
+                  className={styles.hover_animation}
+                  onMouseLeave={(e) => {
+                    mouseLeave(e);
+                  }}
+                >
+                  <div className={styles.product_sizes}>
+                    {product.sizes.map((size) => (
+                      <button
+                        onClick={(event) => showAddToCart(event, size.quantity)}
+                        key={size.value}
+                        className={`${styles.size}
                     ${size.quantity === 0 ? styles.unavilable : ''}`}
-                        >
-                          {size.value}
-                          <span
-                            className={
-                              size.quantity < 3 && size.quantity !== 0
-                                ? styles.low_stock
-                                : styles.avilable
-                            }
-                          ></span>
-                        </button>
-                      ))}
-                    </div>
-                    <div className={styles.add_to_cart}>
-                      <Link to={'/'}>In Stock</Link>
-                      <button className={styles.add_to_cart_btn}>
-                        Add to Bag
+                      >
+                        {size.value}
+                        <span
+                          className={
+                            size.quantity < 3 && size.quantity !== 0
+                              ? styles.low_stock
+                              : styles.avilable
+                          }
+                        ></span>
                       </button>
-                    </div>
+                    ))}
                   </div>
-                </div>
-
-                <div className={styles.product_details}>
-                  <div className={styles.product_details_top}>
-                    <Link to={'/'} className={styles.product_name}>
-                      {product.name}
-                    </Link>
-                  </div>
-                  <div className={styles.product_details_bottom}>
-                    <Link to={'/'} className={styles.product_price}>
-                      {product.currency} {product.price}
-                    </Link>
-                    <button
-                      className={styles.show_sizes_button}
-                      data-id={product.id}
-                      onClick={showMobileSizes}
-                    >
-                      <img src={bagImage} alt="bag" />
+                  <div className={styles.add_to_cart}>
+                    <Link to={'/'}>In Stock</Link>
+                    <button className={styles.add_to_cart_btn}>
+                      Add to Bag
                     </button>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
+
+              <div className={styles.product_details}>
+                <div className={styles.product_details_top}>
+                  <Link to={'/'} className={styles.product_name}>
+                    {product.name}
+                  </Link>
+                </div>
+                <div className={styles.product_details_bottom}>
+                  <Link to={'/'} className={styles.product_price}>
+                    {product.currency} {product.price}
+                  </Link>
+                  <button
+                    className={styles.show_sizes_button}
+                    data-id={product.id}
+                    onClick={showMobileSizes}
+                  >
+                    <img src={bagImage} alt="bag" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      )}
+      </div>
 
       <div className={styles.mobile_buy}>
         <div className={styles.mobile_buy_upper}>
@@ -856,18 +872,20 @@ const Products: React.FC = () => {
         </div>
       </div>
 
-      <div className={styles.loading}>
-        <div className={styles.wave}></div>
-        <div className={styles.wave}></div>
-        <div className={styles.wave}></div>
-        <div className={styles.wave}></div>
-        <div className={styles.wave}></div>
-        <div className={styles.wave}></div>
-        <div className={styles.wave}></div>
-        <div className={styles.wave}></div>
-        <div className={styles.wave}></div>
-        <div className={styles.wave}></div>
-      </div>
+      {isLoading && (
+        <div className={styles.loading} ref={loadingAnimation}>
+          <div className={styles.wave}></div>
+          <div className={styles.wave}></div>
+          <div className={styles.wave}></div>
+          <div className={styles.wave}></div>
+          <div className={styles.wave}></div>
+          <div className={styles.wave}></div>
+          <div className={styles.wave}></div>
+          <div className={styles.wave}></div>
+          <div className={styles.wave}></div>
+          <div className={styles.wave}></div>
+        </div>
+      )}
     </div>
   );
 };
