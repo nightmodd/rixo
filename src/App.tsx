@@ -25,11 +25,11 @@ const router = createBrowserRouter([
       {
         path: '/collections/:id',
         element: <Products />,
-       
       },
     ],
   },
 ]);
+
 function App() {
   return (
     <AuthContextProvider>
