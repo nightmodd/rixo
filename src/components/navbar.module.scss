@@ -173,7 +173,7 @@ a {
 
   img {
     width: 100%;
-    height: 100%;
+
     object-fit: cover;
     object-position: top;
     margin-bottom: 0.2rem;
@@ -219,6 +219,12 @@ a {
   .mobile_nav {
     display: block;
     position: fixed;
+<<<<<<< Updated upstream
+=======
+    background-color: #fffcee;
+    width: 100vw;
+    height: 3.5rem;
+>>>>>>> Stashed changes
     top: 0;
     right: 0;
 
@@ -231,14 +237,10 @@ a {
       background-color: transparent;
       border: none;
       cursor: pointer;
-      z-index: 1000;
+      z-index: 100;
       font-size: 1.3rem;
       margin: 1rem;
       padding: 0.2rem;
-      transition: 0.3s ease-in-out;
-      &:hover {
-        transform: scale(1.2);
-      }
     }
 
     .mobile_backdrop {
@@ -249,7 +251,7 @@ a {
       height: 100vh;
       z-index: 20;
       background-color: rgba(0, 0, 0, 0.2);
-      transition: transform 0.2s ease-in-out;
+      transition: opacity 0.2s ease-out;
     }
     .mobile_links {
       position: fixed;
@@ -368,6 +370,9 @@ a {
         margin-right: 1rem;
       }
     }
+    .featured_item_upper {
+      height: auto;
+    }
 
     a:first-child:nth-last-child(1) {
       grid-column: 1 / span 2;
@@ -383,5 +388,13 @@ a {
   }
   .closed {
     transform: translateX(100%);
+  }
+  .closed_backdrop {
+    opacity: 0;
+    display: none;
+  }
+  .opened_backdrop {
+    opacity: 1;
+    display: block;
   }
 }

@@ -1,9 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef, MouseEventHandler } from 'react';
 import { Link } from 'react-router-dom';
-//import Dropdown from './dropdown';
-//import Context from '../context/context';
 
 import styles from './navbar.module.scss';
+import clsx from 'clsx';
 
 interface Featured {
   title: string;
@@ -548,18 +547,18 @@ const dropdownLinks: DropdownLink[] = [
 const MainNavigation = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
-  //variables
-  const menu = document.querySelector(`.${styles.mobile_links}`);
   const submenus = document.querySelectorAll(`.${styles.submenus_container}`);
+<<<<<<< Updated upstream
   const backdropMobile = document.querySelector(`.${styles.mobile_backdrop}`);
 
   //handling on Click events
+=======
+  const backdropMobile = useRef<HTMLDivElement>(null);
+
+  //not optimized
+>>>>>>> Stashed changes
   const closeAll = () => {
     setShowMobileMenu(false);
-    menu?.classList.remove(styles.opened);
-    menu?.classList.add(styles.closed);
-    backdropMobile?.classList.remove(styles.opened);
-    backdropMobile?.classList.add(styles.closed);
     submenus.forEach((submenu) => {
       submenu.classList.add(styles.mobile_hidden);
     });
@@ -567,34 +566,21 @@ const MainNavigation = () => {
 
   const toggleMobileMenu = () => {
     setShowMobileMenu(!showMobileMenu);
-
-    if (showMobileMenu === false) {
-      menu?.classList.add(styles.opened);
-      menu?.classList.remove(styles.closed);
-      backdropMobile?.classList.add(styles.opened);
-      backdropMobile?.classList.remove(styles.closed);
-    } else {
-      menu?.classList.remove(styles.opened);
-      menu?.classList.add(styles.closed);
-      backdropMobile?.classList.remove(styles.opened);
-      backdropMobile?.classList.add(styles.closed);
-      submenus.forEach((submenu) => {
-        submenu.classList.add(styles.mobile_hidden);
-      });
-    }
   };
 
-  const toggleSubmenu = (e: any) => {
-    const submenu = e.target.nextElementSibling;
+  const toggleSubmenu: MouseEventHandler<HTMLButtonElement> = (e) => {
+    const submenu = e.currentTarget.nextElementSibling;
     submenu?.classList.toggle(styles.mobile_hidden);
   };
 
-  const closeSubmenu = (e: any) => {
-    const submenu = e.target.parentElement;
+  const closeSubmenu: MouseEventHandler<HTMLButtonElement> = (e) => {
+    const submenu = e.currentTarget.parentElement;
     submenu?.classList.add(styles.mobile_hidden);
   };
 
-  backdropMobile?.addEventListener('click', closeAll);
+  backdropMobile.current?.addEventListener('click', () => {
+    closeAll();
+  });
 
   return (
     <header className={styles.header}>
@@ -670,9 +656,22 @@ const MainNavigation = () => {
           )}
         </button>
 
-        <div className={`${styles.mobile_backdrop} ${styles.closed}`}></div>
+        <div
+          className={clsx({
+            [styles.mobile_backdrop]: true,
+            [styles.opened_backdrop]: showMobileMenu,
+            [styles.closed_backdrop]: !showMobileMenu,
+          })}
+          ref={backdropMobile}
+        ></div>
         <>
-          <ul className={`${styles.mobile_links}  ${styles.closed}`}>
+          <ul
+            className={clsx({
+              [styles.mobile_links]: true,
+              [styles.opened]: showMobileMenu,
+              [styles.closed]: !showMobileMenu,
+            })}
+          >
             {dropdownLinks.map((item) => {
               return (
                 <li
@@ -684,7 +683,10 @@ const MainNavigation = () => {
                   </button>
                   {item.sublinks && (
                     <div
-                      className={`${styles.submenus_container} ${styles.mobile_hidden}`}
+                      className={clsx({
+                        [styles.submenus_container]: true,
+                        [styles.mobile_hidden]: true,
+                      })}
                     >
                       <button
                         className={styles.back_button}
@@ -696,9 +698,12 @@ const MainNavigation = () => {
                       </button>
                       {item.sublinks.map((subitem) => (
                         <ul className={`${styles.submenu_mobile} `}>
-                          <Link to={subitem.path}>
-                            <h5>{subitem.title}</h5>
-                          </Link>
+                          <h5>
+                            <Link to={subitem.path} onClick={closeAll}>
+                              {subitem.title}
+                            </Link>
+                          </h5>
+
                           {subitem.sublinks &&
                             subitem.sublinks.map((subsubitem) => (
                               <li key={subsubitem.title}>
@@ -720,6 +725,7 @@ const MainNavigation = () => {
                               <Link
                                 to={featureditem.path}
                                 className={styles.featured_item}
+                                onClick={closeAll}
                               >
                                 <div className={styles.featured_item_upper}>
                                   <img
