@@ -1,0 +1,20 @@
+.select_menu {
+  background: transparent;
+  border: none;
+  padding-right: 0.5rem;
+  text-align: right;
+  box-sizing: content-box;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: 'Biennale';
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  
+
+  &:focus {
+    outline: none;
+  }
+  option {
+    font-weight: 500;
+  }
+}

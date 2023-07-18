@@ -1,7 +1,11 @@
+.secondryNav {
+  display: none;
+}
+
 .main_content {
   position: relative;
   width: 100%;
-  margin-top: 2.5rem;
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -79,22 +83,31 @@
 
 .lower_section {
   position: relative;
-  width: 85%;
+  width: 100%;
   display: flex;
-  gap: 1.5rem;
+  gap: 2%;
   margin-top: 4rem;
 }
 .filter_section {
-  position: relative;
-  width: 25%;
+  position: sticky;
+  top: 5rem;
+  margin-left: 5%;
+  width: 23%;
+  height: fit-content;
+  max-height: 87vh;
+  overflow: scroll;
+  scroll-behavior: smooth;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+
+
 }
 .products_section {
   position: relative;
-  width: 70%;
+  width: 67%;
+  margin-right: 3%;
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(4, 1fr);
@@ -108,7 +121,6 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-
   overflow: hidden;
   transition: all 0.5s ease-in-out;
   cursor: pointer;
@@ -144,7 +156,7 @@
   img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: fill;
     transition: opacity 0.3s ease-in-out;
   }
 }
@@ -210,33 +222,74 @@
 }
 
 @media screen and (max-width: 92.5rem) {
+  .lower_section {
+    width: 100%;
+  }
   .product_sizes {
     padding: 0.5rem;
   }
 }
 @media screen and (max-width: 87.5rem) {
-  .lower_section {
-    width: 100%;
+  .filter_section {
+    margin-left: 2%;
+    width: 31%;
   }
   .products_section {
     margin: auto;
   }
 }
 @media screen and (max-width: 75rem) {
-  .lower_section {
-    width: 100%;
-  }
   .products_section {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 @media screen and (max-width: 62.5rem) {
+  .main_content {
+    margin-top: 2rem;
+  }
   .product_sizes {
     padding: 0.5rem;
   }
 }
 
 @media screen and (max-width: 51rem) {
+  .secondryNav {
+    display: flex;
+    position: fixed;
+    top: 3.6rem;
+    left: 0;
+    width: 100%;
+    height: auto;
+    padding: 0.8rem 1rem;
+    background-color: #fffcee;
+    border-bottom: #a8472f 1px solid;
+    align-items: flex-end;
+    justify-content: flex-end;
+    text-align: end;
+    gap: 1rem;
+    z-index: 20;
+  }
+  .filterButton {
+    border: none;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: 'Biennale';
+    letter-spacing: 0.06em;
+    gap: 12px;
+    cursor: pointer;
+    i {
+      font-size: 0.8rem;
+    }
+  }
+  .main_content {
+    margin-top: 5rem;
+  }
+  .header_right {
+    display: none;
+  }
   .filter_section {
     display: none;
   }
@@ -335,6 +388,7 @@
 
 @media screen and (max-width: 31.25rem) {
   .main_content {
+    margin-top: 3.5rem;
     .title {
       font-size: 2rem;
       font-weight: 300;
