@@ -5,7 +5,7 @@ import {
   useCallback,
   MouseEventHandler,
 } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import SizesSelector from '../components/size-selector';
 import SortMenu from '../components/sort';
 import FiltersForm from '../components/filters-form';
@@ -16,7 +16,7 @@ import { fetchCollection } from '../utils/firestore';
 import bagImage from '../assets/shopping_bag.svg';
 import styles from './products.module.scss';
 import clsx from 'clsx';
-import { set } from 'react-hook-form';
+
 
 export interface Selection extends Size {
   productId: string;
@@ -26,13 +26,20 @@ const Products = () => {
   const params = useParams<{ id: string }>();
   const id = params.id!;
   const prevId = useRef<string>('');
+  const backdropMobile = useRef<HTMLDivElement>(null);
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const loadingAnimation = useRef<HTMLDivElement>(null);
   const [mobileData, setMobileData] = useState<Product | null>(null);
   const [selection, setSelection] = useState<Selection | null>(null);
   const [sortBy, setSortBy] = useState<Array<any> | null>(null);
+  const [tempFilters, setTempFilters] = useState<Array<AppliedFilter> | null>(
+    []
+  );
   const [activeFilters, setActiveFilters] =
     useState<Array<AppliedFilter> | null>([]);
+
+  const [showFiltersMobile, setShowFiltersMobile] = useState(false);
 
   const [paginationState, setPaginationState] = useState<
     PaginationState<Product>
@@ -57,6 +64,8 @@ const Products = () => {
       const docs = snapshot.docs.map((doc) => doc.data());
 
       if (revalidate) {
+        setActiveFilters(null);
+        setSortBy(null);
         return setPaginationState({
           data: [...docs],
           hasMore: docs.length > 0,
@@ -101,7 +110,32 @@ const Products = () => {
     };
   }, [fetchData, id, paginationState.cursor, sortBy]);
 
-  //handling events
+  useEffect(() => {
+    if (sortBy !== null) {
+      searchParams.set('sort', sortBy.join('-'));
+      setSearchParams();
+    }
+    if (activeFilters !== null && activeFilters.length > 0) {
+      searchParams.set(
+        'filters',
+        activeFilters
+          .map((filter) => {
+            return `${filter.filterType}_${filter.value}`;
+          })
+          .join(`--`)
+      );
+      setSearchParams(searchParams);
+    }
+    if (activeFilters?.length === 0 || activeFilters === null) {
+      searchParams.delete('filters');
+      setSearchParams(searchParams);
+    }
+    if (sortBy === null) {
+      searchParams.delete('sort');
+      setSearchParams(searchParams);
+    }
+  }, [sortBy, activeFilters, searchParams, setSearchParams]);
+
   const mouseLeave = () => {
     if (window.innerWidth < 814) return;
 
@@ -170,30 +204,43 @@ const Products = () => {
     });
   };
 
+  const applyFilters = () => {
+    setActiveFilters(tempFilters);
+  };
+
   const removeFilter = (value: string | Array<number>) => {
     const newFilters = activeFilters?.filter(
       (filter) => filter.value !== value
     );
-    console.log(newFilters);
+
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     setActiveFilters(newFilters!);
-    console.log(activeFilters);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    setTempFilters(newFilters!);
   };
 
-  //done
   const clearFilters = () => {
+    setTempFilters(null);
     setActiveFilters(null);
   };
-  //done
+
   const addAppliedFilter = (filters: Array<AppliedFilter>) => {
-    setActiveFilters(filters);
+    setTempFilters(filters);
   };
+
+  const toggleFiltersMobile = () => {
+    setShowFiltersMobile((prev) => !prev);
+  };
+
+  backdropMobile.current?.addEventListener('click', () => {
+    setShowFiltersMobile(false);
+  });
 
   return (
     <>
       <div className={styles.secondryNav}>
         <SortMenu change={sortChangeHandler} />
-        <button className={styles.filterButton} onClick={clearFilters}>
+        <button className={styles.filterButton} onClick={toggleFiltersMobile}>
           Filter
           <i className="fa-solid fa-angle-down"></i>
         </button>
@@ -211,6 +258,7 @@ const Products = () => {
               <SortMenu change={sortChangeHandler} />
             </div>
           </div>
+
           <span className={styles.title}>{id}</span>
           <p className={styles.description}>
             This is the best store in the whole world
@@ -234,7 +282,13 @@ const Products = () => {
               />
             )}
 
-            <FiltersForm appliedFilters={activeFilters} addAppliedFilter={addAppliedFilter} />
+            <FiltersForm
+              appliedFilters={tempFilters}
+              addAppliedFilter={addAppliedFilter}
+            />
+            <button className={styles.apply_btn} onClick={applyFilters}>
+              Apply Filters
+            </button>
           </div>
           <div className={`${styles.products_section} ${styles.grid_4} `}>
             {paginationState.data.map((product) => (
@@ -330,6 +384,42 @@ const Products = () => {
             <div className={styles.wave}></div>
           </div>
         )}
+      </div>
+
+      <div
+        className={clsx({
+          [styles.mobile_backdrop]: true,
+          [styles.opened_backdrop]: showFiltersMobile,
+          [styles.closed_backdrop]: !showFiltersMobile,
+        })}
+        ref={backdropMobile}
+      ></div>
+      <div
+        className={clsx({
+          [styles.filters_mobile_menu]: true,
+          [styles.open]: showFiltersMobile,
+        })}
+      >
+        <div className={styles.mobile_filters_header}>
+          <span>Filters</span>
+          <button onClick={toggleFiltersMobile}>
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div className={styles.filter_form_mobile}>
+          <FiltersForm
+            appliedFilters={tempFilters}
+            addAppliedFilter={addAppliedFilter}
+          />
+        </div>
+        <div className={styles.mobile_filters_bottom}>
+          <button className={styles.mobile_apply_btn} onClick={applyFilters}>
+            Apply Filters
+          </button>
+          <button className={styles.mobile_clear_btn} onClick={clearFilters}>
+            Clear All
+          </button>
+        </div>
       </div>
     </>
   );

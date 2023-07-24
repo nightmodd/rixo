@@ -1,6 +1,12 @@
 .secondryNav {
   display: none;
 }
+.mobile_filters {
+  display: none;
+}
+.filters_mobile_menu {
+  display: none;
+}
 
 .main_content {
   position: relative;
@@ -101,8 +107,26 @@
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-
-
+  .apply_btn {
+    display: block;
+    width: 80%;
+    padding: 12px 24px;
+    font-family: 'Biennale';
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    background-color: #000;
+    text-transform: uppercase;
+    color: #fff;
+    border: 1px solid transparent;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    &:hover {
+      background-color: transparent;
+      border: 1px solid #0a3524;
+      color: #0a3524;
+    }
+  }
 }
 .products_section {
   position: relative;
@@ -256,7 +280,7 @@
   .secondryNav {
     display: flex;
     position: fixed;
-    top: 3.6rem;
+    top: 3.5rem;
     left: 0;
     width: 100%;
     height: auto;
@@ -267,7 +291,128 @@
     justify-content: flex-end;
     text-align: end;
     gap: 1rem;
-    z-index: 20;
+    z-index: 1;
+  }
+  .mobile_filters {
+    display: block;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    z-index: 60;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  .show_mobile_filters {
+    transform: translateX(0);
+  }
+
+  .mobile_backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.2);
+    transition: opacity 0.2s ease-out;
+    cursor: pointer;
+    z-index: 40;
+  }
+  .closed_backdrop {
+    opacity: 0;
+    display: none;
+  }
+  .opened_backdrop {
+    opacity: 1;
+    display: block;
+  }
+  .filters_mobile_menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 40%;
+    min-width: 16rem;
+    height: 100vh;
+    background-color: #fffcee;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0 1rem;
+    margin-right: 0px;
+    z-index: 50;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  .open {
+    transform: translateX(0);
+  }
+  .mobile_filters_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    span {
+      font-family: 'Biennale';
+      font-size: 18px;
+      font-weight: 500;
+      text-transform: capitalize;
+      letter-spacing: 0.06em;
+    }
+    button {
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+      font-size: 2rem;
+    }
+  }
+  .filter_form_mobile {
+    width: 100%;
+    max-height: 75%;
+    overflow-y: scroll;
+  }
+  .mobile_filters_bottom {
+    position: absolute;
+    bottom: 1rem;
+    right: 0;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 1rem;
+    button {
+      display: block;
+      width: 100%;
+      padding: 12px 24px;
+      font-family: 'Biennale';
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border: 1px solid transparent;
+      transition: all 0.2s ease-in-out;
+    }
+    .mobile_apply_btn {
+      background-color: #000;
+      color: #fff;
+      &:hover {
+        background-color: transparent;
+        border: 1px solid #0a3524;
+        color: #0a3524;
+      }
+    }
+    .mobile_clear_btn {
+      background-color: transparent;
+      border: 1px solid #000;
+      &:hover {
+        background-color: #0a3524;
+        border-color: #0a3524;
+        color: #ffffff;
+      }
+    }
   }
   .filterButton {
     border: none;
@@ -423,7 +568,6 @@
   margin: 10px;
   animation: wave 1s linear infinite;
   border-radius: 20px;
-  z-index: 10;
 }
 .wave:nth-child(2) {
   animation-delay: 0.1s;

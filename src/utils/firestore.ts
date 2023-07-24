@@ -7,8 +7,10 @@ import {
   QuerySnapshot,
   startAfter,
   orderBy,
+  where,
   QueryDocumentSnapshot,
 } from 'firebase/firestore';
+//import { AppliedFilter } from '../components/applied-filter';
 
 import { db } from '../config/firebase-config';
 
@@ -16,14 +18,20 @@ export const fetchCollection = async <Type>(
   id: string,
   cursor: QueryDocumentSnapshot<Type> | null,
   order: Array<any> | null
+  //filters: Array<AppliedFilter> | null
 ): Promise<QuerySnapshot<Type>> => {
-  const clauses = order ? orderBy(order[0], order[1]) : orderBy('id');
-  const clauses2 = cursor ? [startAfter(cursor)] : [];
+  const clauses2 = order ? orderBy(order[0], order[1]) : orderBy('id');
+  const clauses3 = cursor ? [startAfter(cursor)] : [];
+ /*   const clauses =
+    filters?.map((filter) => {
+      where(filter.filterType, '==', filter.value);
+    }) || [];  */
 
   const resolvedQuery = query<Type>(
     collection(db, id) as Query<Type>,
-    clauses,
-    ...clauses2,
+   // ...clauses,
+    clauses2,
+    ...clauses3,
     limit(10)
   );
 

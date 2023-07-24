@@ -2,8 +2,8 @@ import React, { MouseEventHandler } from 'react';
 import styles from './applied-filter.module.scss';
 
 export interface AppliedFilter {
-  name: string;
-  value: string | Array<number>;
+  filterType: string;
+  value: string | Array<string>;
 }
 interface interfaceProps {
   filters: Array<AppliedFilter> | null;
@@ -19,8 +19,9 @@ const AppliedFilters: React.FC<interfaceProps> = ({
   const deletFilter: MouseEventHandler<HTMLButtonElement> = (e) => {
     const button = e.currentTarget;
     const value = button.dataset.value;
+    const filterType = button.dataset.filterType;
 
-    if (value) {
+    if (value && filterType) {
       removeFilter(value);
     }
   };
@@ -36,13 +37,13 @@ const AppliedFilters: React.FC<interfaceProps> = ({
       </div>
       <ul className={styles.applied_filters_bottom}>
         {filters &&
-          filters.map((filter) => (
-            <li key={filter.name} className={styles.filter}>
+          filters.map((filter,index) => (
+            <li key={index} className={styles.filter}>
               {filter.value}
               <button
                 onClick={deletFilter}
                 data-value={filter.value}
-                data-name={filter.name}
+                data-filter-type={filter.filterType}
               >
                 <i className="fa-solid fa-xmark"></i>
               </button>
