@@ -3,7 +3,6 @@ import { BaseFilter } from './filters-form';
 
 import styles from './filters-form.module.scss';
 
-
 interface SelectFilterProps extends BaseFilter {
   type: 'select';
   choices: Array<{

@@ -7,7 +7,7 @@ export interface AppliedFilter {
 }
 interface interfaceProps {
   filters: Array<AppliedFilter> | null;
-  removeFilter: (value: string | Array<number>) => void;
+  removeFilter: (value: string | Array<string>, filterType:string) => void;
   clearAll: () => void;
 }
 
@@ -22,7 +22,7 @@ const AppliedFilters: React.FC<interfaceProps> = ({
     const filterType = button.dataset.filterType;
 
     if (value && filterType) {
-      removeFilter(value);
+      removeFilter(value, filterType);
     }
   };
 
@@ -37,9 +37,12 @@ const AppliedFilters: React.FC<interfaceProps> = ({
       </div>
       <ul className={styles.applied_filters_bottom}>
         {filters &&
-          filters.map((filter,index) => (
-            <li key={index} className={styles.filter}>
-              {filter.value}
+          filters.map((filter, index) => (
+            <li key={index} className={styles.filter} >
+              {filter.value.length === 2
+                ? `$${filter.value[0]} - $${filter.value[1]}`
+                : filter.value}
+
               <button
                 onClick={deletFilter}
                 data-value={filter.value}

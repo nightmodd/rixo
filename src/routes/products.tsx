@@ -17,13 +17,13 @@ import bagImage from '../assets/shopping_bag.svg';
 import styles from './products.module.scss';
 import clsx from 'clsx';
 
-
 export interface Selection extends Size {
   productId: string;
 }
 
 const Products = () => {
   const params = useParams<{ id: string }>();
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const id = params.id!;
   const prevId = useRef<string>('');
   const backdropMobile = useRef<HTMLDivElement>(null);
@@ -208,10 +208,13 @@ const Products = () => {
     setActiveFilters(tempFilters);
   };
 
-  const removeFilter = (value: string | Array<number>) => {
-    const newFilters = activeFilters?.filter(
-      (filter) => filter.value !== value
-    );
+  const removeFilter = (value: string | Array<string>, filterType:string) => {
+    const newFilters = activeFilters?.filter((filter) => {
+      if (filterType === 'price') {
+        return filter.filterType !== filterType;
+      }
+      return filter.value !== value;
+    });
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     setActiveFilters(newFilters!);
@@ -226,6 +229,7 @@ const Products = () => {
 
   const addAppliedFilter = (filters: Array<AppliedFilter>) => {
     setTempFilters(filters);
+    console.log(filters);
   };
 
   const toggleFiltersMobile = () => {
@@ -299,7 +303,10 @@ const Products = () => {
                 onMouseLeave={mouseLeave}
               >
                 <div className={styles.action_container}>
-                  <Link to={'/'} className={styles.product_images}>
+                  <Link
+                    to={`/collections/${id}/${product.id}`}
+                    className={styles.product_images}
+                  >
                     <img
                       src={product.images[0]}
                       alt="product"

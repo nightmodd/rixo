@@ -115,6 +115,7 @@ const FiltersForm: React.FC<FiltersFormProps> = ({
   addAppliedFilter,
 }) => {
   //remove checked from checkboxes if appliedFilters is null
+  //tlesa mo2kta 
   useEffect(() => {
     const checkboxs =
       document.querySelectorAll<HTMLInputElement>(`.checkboxes`);
@@ -127,12 +128,45 @@ const FiltersForm: React.FC<FiltersFormProps> = ({
         checkbox.checked = false;
       }
     });
+    const minvalue = document.querySelectorAll<HTMLInputElement>(
+      `input[type="number"]#min`
+    );
+    const maxvalue = document.querySelectorAll<HTMLInputElement>(
+      `input[type="number"]#max`
+    );
+
+    if (appliedFilters) {
+      appliedFilters.forEach((filter) => {
+        if (filter.filterType === 'price') {
+          minvalue.forEach((min) => {
+            if (min.getAttribute('data-filter-type') === 'price') {
+              min.value = filter.value[0];
+            }
+          });
+          maxvalue.forEach((max) => {
+            if (max.getAttribute('data-filter-type') === 'price') {
+              max.value = filter.value[1];
+            }
+          });
+        }
+      });
+    }
   }, [appliedFilters]);
 
   const onUpdate = (e: React.ChangeEvent<HTMLFormElement>) => {
     const form = e.currentTarget;
     const checkboxes =
       form.querySelectorAll<HTMLInputElement>(`.checkboxes:checked`);
+
+    const minvalue = form.querySelector<HTMLInputElement>(
+      `input[type="number"]#min`
+    )?.value;
+    const maxvalue = form.querySelector<HTMLInputElement>(
+      `input[type="number"]#max`
+    )?.value;
+    const filterType = form
+      .querySelector<HTMLInputElement>(`input[type="number"]#min`)
+      ?.getAttribute('data-filter-type');
 
     const filters: Array<AppliedFilter> = Array.from(checkboxes).map(
       (checkbox) => {
@@ -142,8 +176,13 @@ const FiltersForm: React.FC<FiltersFormProps> = ({
         };
       }
     );
+    const pricefilter = {
+      value: [minvalue as string, maxvalue as string],
+      filterType: filterType as string,
+    };
+    const allFilters = [...filters, pricefilter];
 
-    addAppliedFilter(filters);
+    addAppliedFilter(allFilters);
   };
 
   return (
