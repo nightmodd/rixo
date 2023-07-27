@@ -39,7 +39,7 @@ const AppliedFilters: React.FC<interfaceProps> = ({
         {filters &&
           filters.map((filter, index) => (
             <li key={index} className={styles.filter} >
-              {filter.value.length === 2
+              {filter.filterType === 'price'
                 ? `$${filter.value[0]} - $${filter.value[1]}`
                 : filter.value}
 

@@ -48,7 +48,6 @@ const LoginForm: React.FC = () => {
       navigate('/');
     } catch (error: any) {
       setErrorMessage(error.message);
-      console.log(error.message);
     }
   };
 

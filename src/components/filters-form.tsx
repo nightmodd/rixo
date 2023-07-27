@@ -10,33 +10,33 @@ export interface BaseFilter {
 
 const sizeChoices = [
   {
-    name: 'XS',
-    value: 'XS',
+    name: '8',
+    value: '8',
     filterType: 'size',
   },
   {
-    name: 'S',
-    value: 'S',
+    name: '10',
+    value: '10',
     filterType: 'size',
   },
   {
-    name: 'M',
-    value: 'M',
+    name: '12',
+    value: '12',
     filterType: 'size',
   },
   {
-    name: 'L',
-    value: 'L',
+    name: '14',
+    value: '14',
     filterType: 'size',
   },
   {
-    name: 'XL',
-    value: 'XL',
+    name: '16',
+    value: '16',
     filterType: 'size',
   },
   {
-    name: 'XXL',
-    value: 'XXL',
+    name: '18',
+    value: '18',
     filterType: 'size',
   },
 ];
