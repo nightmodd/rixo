@@ -179,7 +179,7 @@ ul {
 
   img {
     width: 100%;
-    height: 100%;
+
     object-fit: cover;
     object-position: top;
     margin-bottom: 0.2rem;
@@ -227,9 +227,11 @@ ul {
     position: fixed;
     background-color: #fffcee;
     width: 100vw;
-    height: 3rem;
+    height: 3.5rem;
     top: 0;
     right: 0;
+    border-bottom: 3px solid #000;
+    z-index: 60;
 
     .hamburger {
       position: absolute;
@@ -240,14 +242,10 @@ ul {
       background-color: transparent;
       border: none;
       cursor: pointer;
-      z-index: 1000;
+      z-index: 100;
       font-size: 1.3rem;
       margin: 1rem;
       padding: 0.2rem;
-      transition: 0.3s ease-in-out;
-      &:hover {
-        transform: scale(1.2);
-      }
     }
 
     .mobile_backdrop {
@@ -258,7 +256,7 @@ ul {
       height: 100vh;
       z-index: 20;
       background-color: rgba(0, 0, 0, 0.2);
-      transition: transform 0.2s ease-in-out;
+      transition: opacity 0.2s ease-out;
     }
     .mobile_links {
       position: fixed;
@@ -305,7 +303,7 @@ ul {
     scroll-behavior: smooth;
     transition: transform 0.3s ease-in-out;
     transform: translateX(0);
-    z-index: 50;
+    z-index: 40;
 
     &.mobile_hidden {
       transform: translateX(100%);
@@ -331,7 +329,6 @@ ul {
 
   .submenu_mobile {
     position: relative;
-
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -377,6 +374,9 @@ ul {
         margin-right: 1rem;
       }
     }
+    .featured_item_upper {
+      height: auto;
+    }
 
     a:first-child:nth-last-child(1) {
       grid-column: 1 / span 2;
@@ -392,5 +392,13 @@ ul {
   }
   .closed {
     transform: translateX(100%);
+  }
+  .closed_backdrop {
+    opacity: 0;
+    display: none;
+  }
+  .opened_backdrop {
+    opacity: 1;
+    display: block;
   }
 }
