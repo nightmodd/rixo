@@ -11,7 +11,7 @@ interface NumberFilter extends BaseFilter {
 }
 
 const NumberFilter: React.FC<NumberFilter> = ({
-  name,
+  filterName,
   min,
   max,
   filterType,
@@ -115,7 +115,7 @@ const NumberFilter: React.FC<NumberFilter> = ({
   return (
     <div className={styles.filter_div}>
       <button className={styles.filter_button} onClick={clickHandler}>
-        {name}
+        {filterName}
         {<i className={`fa-solid fa-minus ${styles.hide}`} ref={minus}></i>}
         {<i className="fa-solid fa-plus" ref={plus}></i>}
       </button>

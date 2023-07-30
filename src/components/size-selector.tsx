@@ -28,37 +28,41 @@ const getCardQuantityLabel = (quantity: number) => {
 const SizesSelector = ({
   product,
   selection,
-
   handleSelect,
 }: SizesSelectorProps) => {
+  let counter = 0;
+
   return (
     <div className={classes.hover_animation} data-id={product.id}>
       <div className={classes.product_sizes}>
-        {product.sizes.map((size) => (
-          <button
-            onClick={handleSelect}
-            key={size.value}
-            className={clsx({
-              [styles.size]: true,
-              [styles.unavilable]: Number(size.quantity) === 0,
-              [styles.low_stock]:
-                Number(size.quantity) < 3 && Number(size.quantity) !== 0,
-              [styles.available]: Number(size.quantity) >= 3,
-              [styles.selected]: selection?.value === size.value,
-            })}
-            data-size={size.value}
-          >
-            {size.value}
-            <span
+        {product.sizes.map((size) => {
+          counter++;
+          return (
+            <button
+              onClick={handleSelect}
+              key={size.value}
               className={clsx({
+                [styles.size]: true,
+                [styles.unavilable]: Number(size.quantity) === 0,
                 [styles.low_stock]:
                   Number(size.quantity) < 3 && Number(size.quantity) !== 0,
                 [styles.available]: Number(size.quantity) >= 3,
-                [styles.unavilable]: Number(size.quantity) === 0,
+                [styles.selected]: selection?.value === size.value,
               })}
-            ></span>
-          </button>
-        ))}
+              data-size={size.value}
+            >
+              {size.value}
+              <span
+                className={clsx({
+                  [styles.low_stock]:
+                    Number(size.quantity) < 3 && Number(size.quantity) !== 0,
+                  [styles.available]: Number(size.quantity) >= 3,
+                  [styles.unavilable]: Number(size.quantity) === 0,
+                })}
+              ></span>
+            </button>
+          );
+        })}
       </div>
 
       {selection && (
