@@ -5,7 +5,7 @@ import NormalFilter from './normal-filter';
 import { AppliedFilter } from './applied-filter';
 
 export interface BaseFilter {
-  name: string;
+  filterName: string;
 }
 
 const sizeChoices = [
@@ -115,7 +115,7 @@ const FiltersForm: React.FC<FiltersFormProps> = ({
   addAppliedFilter,
 }) => {
   //remove checked from checkboxes if appliedFilters is null
-  //tlesa mo2kta 
+  //tlesa mo2kta
   useEffect(() => {
     const checkboxs =
       document.querySelectorAll<HTMLInputElement>(`.checkboxes`);
@@ -187,11 +187,11 @@ const FiltersForm: React.FC<FiltersFormProps> = ({
 
   return (
     <form onChange={onUpdate}>
-      <NormalFilter name="Sizes" choices={sizeChoices} type="select" />
-      <NormalFilter name="Colour" choices={colourChoices} type="select" />
-      <NormalFilter name="Print" choices={printChoices} type="select" />
+      <NormalFilter filterName="Sizes" choices={sizeChoices} type="select" />
+      <NormalFilter filterName="Colour" choices={colourChoices} type="select" />
+      <NormalFilter filterName="Print" choices={printChoices} type="select" />
       <NumberFilter
-        name="Price"
+        filterName="Price"
         min={0}
         max={1000}
         type="number"

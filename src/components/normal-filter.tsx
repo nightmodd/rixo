@@ -11,7 +11,7 @@ interface SelectFilterProps extends BaseFilter {
     filterType: string;
   }>;
 }
-const NormalFilter: React.FC<SelectFilterProps> = ({ name, choices }) => {
+const NormalFilter: React.FC<SelectFilterProps> = ({ filterName, choices }) => {
   //refs
   const plus = useRef<HTMLDivElement>(null);
   const minus = useRef<HTMLDivElement>(null);
@@ -36,13 +36,13 @@ const NormalFilter: React.FC<SelectFilterProps> = ({ name, choices }) => {
   return (
     <div className={styles.filter_div}>
       <button className={styles.filter_button} onClick={clickHandler}>
-        {name}
+        {filterName}
         {<i className={`fa-solid fa-minus ${styles.hide}`} ref={minus}></i>}
         {<i className="fa-solid fa-plus" ref={plus}></i>}
       </button>
       <ul className={styles.filter_choices} ref={choicesDiv}>
         {choices.map((choice) => (
-          <li className={styles.checkbox_container}>
+          <li className={styles.checkbox_container} key={choice.value}>
             <input
               type="checkbox"
               id={choice.value}

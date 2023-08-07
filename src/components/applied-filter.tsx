@@ -7,7 +7,7 @@ export interface AppliedFilter {
 }
 interface interfaceProps {
   filters: Array<AppliedFilter> | null;
-  removeFilter: (value: string | Array<string>, filterType:string) => void;
+  removeFilter: (value: string | Array<string>, filterType: string) => void;
   clearAll: () => void;
 }
 
@@ -38,7 +38,7 @@ const AppliedFilters: React.FC<interfaceProps> = ({
       <ul className={styles.applied_filters_bottom}>
         {filters &&
           filters.map((filter, index) => (
-            <li key={index} className={styles.filter} >
+            <li key={index} className={styles.filter}>
               {filter.filterType === 'price'
                 ? `$${filter.value[0]} - $${filter.value[1]}`
                 : filter.value}

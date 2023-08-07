@@ -5,7 +5,12 @@ import {
   useCallback,
   MouseEventHandler,
 } from 'react';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
+import {
+  Link,
+  useParams,
+  useSearchParams,
+  useLocation,
+} from 'react-router-dom';
 import SizesSelector from '../components/size-selector';
 import SortMenu from '../components/sort';
 import FiltersForm from '../components/filters-form';
@@ -25,14 +30,17 @@ const Products = () => {
   const params = useParams<{ id: string }>();
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const id = params.id!;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+
   const prevId = useRef<string>('');
   const backdropMobile = useRef<HTMLDivElement>(null);
-
-  const [searchParams, setSearchParams] = useSearchParams();
   const loadingAnimation = useRef<HTMLDivElement>(null);
+
   const [mobileData, setMobileData] = useState<Product | null>(null);
   const [selection, setSelection] = useState<Selection | null>(null);
-  const [sortBy, setSortBy] = useState<Array<any> | null>(null);
+  const [sortBy, setSortBy] = useState<Array<string> | null>(null);
+  const [sortOption, setSortOption] = useState<string | null>(null);
   const [tempFilters, setTempFilters] = useState<Array<AppliedFilter> | null>(
     []
   );
@@ -111,9 +119,38 @@ const Products = () => {
   }, [fetchData, id, paginationState.cursor, sortBy]);
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const sort = searchParams.get('sort');
+    const filters = searchParams.get('filters');
+    console.log(sort, filters);
+    if (sort) {
+      if (sort === 'price-asc') {
+        setSortOption('lowToHigh');
+        setSortBy(['price', 'asc']);
+      }
+      if (sort === 'price-desc') {
+        setSortOption('highToLow');
+        setSortBy(['price', 'desc']);
+      }
+      if (sort === 'name-asc') {
+        setSortOption('A-Z');
+        setSortBy(['name', 'asc']);
+      }
+      if (sort === 'name-desc') {
+        setSortOption('Z-A');
+        setSortBy(['name', 'desc']);
+      }
+      if (sort === '') {
+        setSortOption('default');
+        setSortBy(['id', 'asc']);
+      }
+    }
+  }, [location.search]);
+
+  useEffect(() => {
     if (sortBy !== null) {
       searchParams.set('sort', sortBy.join('-'));
-      setSearchParams();
+      setSearchParams(searchParams);
     }
     if (activeFilters !== null && activeFilters.length > 0) {
       searchParams.set(
@@ -136,6 +173,7 @@ const Products = () => {
     }
   }, [sortBy, activeFilters, searchParams, setSearchParams]);
 
+  //handlers  for the desktop version
   const mouseLeave = () => {
     if (window.innerWidth < 814) return;
 
@@ -158,6 +196,7 @@ const Products = () => {
     setSelection({ ...size, productId });
   };
 
+  //handlers  for the mobile version
   const handleMobileSelect: MouseEventHandler<HTMLButtonElement> = (event) => {
     const target = event.currentTarget as HTMLButtonElement;
     const card = target.closest(`.${styles.hover_animation}`) as HTMLDivElement;
@@ -175,7 +214,6 @@ const Products = () => {
     setSelection({ ...size, productId });
   };
 
-  //need enhancement
   const showMobileSizes: MouseEventHandler<HTMLButtonElement> = (event) => {
     closeMobileBuy();
     setSelection(null);
@@ -195,6 +233,7 @@ const Products = () => {
     setMobileData(null);
   };
 
+  //general handlers
   const sortChangeHandler = (sortBy: string[]) => {
     setSortBy(sortBy);
     setPaginationState({
@@ -208,7 +247,7 @@ const Products = () => {
     setActiveFilters(tempFilters);
   };
 
-  const removeFilter = (value: string | Array<string>, filterType:string) => {
+  const removeFilter = (value: string | Array<string>, filterType: string) => {
     const newFilters = activeFilters?.filter((filter) => {
       if (filterType === 'price') {
         return filter.filterType !== filterType;
@@ -243,7 +282,7 @@ const Products = () => {
   return (
     <>
       <div className={styles.secondryNav}>
-        <SortMenu change={sortChangeHandler} />
+        <SortMenu change={sortChangeHandler} sortOption={sortOption} />
         <button className={styles.filterButton} onClick={toggleFiltersMobile}>
           Filter
           <i className="fa-solid fa-angle-down"></i>
@@ -259,7 +298,7 @@ const Products = () => {
               <span>{id}</span>
             </div>
             <div className={styles.header_right}>
-              <SortMenu change={sortChangeHandler} />
+              <SortMenu change={sortChangeHandler} sortOption={sortOption} />
             </div>
           </div>
 
