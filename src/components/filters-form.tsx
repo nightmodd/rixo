@@ -187,9 +187,9 @@ const FiltersForm: React.FC<FiltersFormProps> = ({
 
   return (
     <form onChange={onUpdate}>
-      <NormalFilter filterName="Sizes" choices={sizeChoices} type="select"  />
-      <NormalFilter filterName="Colour" choices={colourChoices} type="select"/>
-      <NormalFilter filterName="Print" choices={printChoices} type="select"  />
+      <NormalFilter filterName="Sizes" choices={sizeChoices} type="select" />
+      <NormalFilter filterName="Colour" choices={colourChoices} type="select" />
+      <NormalFilter filterName="Print" choices={printChoices} type="select" />
       <NumberFilter
         filterName="Price"
         min={0}
