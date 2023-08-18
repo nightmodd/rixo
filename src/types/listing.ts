@@ -44,7 +44,7 @@ export interface Details {
 }
 
 export interface Variant {
-  name: string;
+  image: string;
   id: string;
 }
 

@@ -12,10 +12,9 @@ interface SizesSelectorProps {
   product: Product;
   selection: Selection | null;
   handleSelect: MouseEventHandler<HTMLButtonElement>;
-  //close: MouseEventHandler<HTMLButtonElement>;
 }
 
-const getCardQuantityLabel = (quantity: number) => {
+export const getCardQuantityLabel = (quantity: number) => {
   if (quantity === 0) {
     return 'Out of stock';
   } else if (quantity < 3) {
@@ -85,7 +84,17 @@ const SizesSelector = ({
                 [styles.circle_available]: selection.quantity >= 3,
               })}
             ></span>
-            <Link to={'/'}>{getCardQuantityLabel(selection?.quantity)}</Link>
+            <Link
+              to={'/'}
+              className={clsx({
+                [styles.low_stock]:
+                  selection?.quantity < 3 && selection?.quantity !== 0,
+                [styles.out_of_stock]: selection?.quantity === 0,
+                [styles.in_stock]: selection?.quantity >= 3,
+              })}
+            >
+              {getCardQuantityLabel(selection?.quantity)}
+            </Link>
           </div>
           <button className={styles.add_to_cart_btn}>
             {selection?.quantity === 0 ? 'Join Waitlist' : 'Add to Bag'}

@@ -88,5 +88,11 @@
 
 body {
   background-color: #fffcee;
- 
+}
+
+body ::-webkit-scrollbar {
+  width: 0 !important;
+}
+body {
+  -ms-overflow-style: none;
 }
