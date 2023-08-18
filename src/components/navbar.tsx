@@ -548,15 +548,9 @@ const MainNavigation = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const submenus = document.querySelectorAll(`.${styles.submenus_container}`);
-<<<<<<< Updated upstream
-  const backdropMobile = document.querySelector(`.${styles.mobile_backdrop}`);
-
-  //handling on Click events
-=======
   const backdropMobile = useRef<HTMLDivElement>(null);
 
   //not optimized
->>>>>>> Stashed changes
   const closeAll = () => {
     setShowMobileMenu(false);
     submenus.forEach((submenu) => {
