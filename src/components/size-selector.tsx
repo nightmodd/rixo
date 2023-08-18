@@ -12,10 +12,9 @@ interface SizesSelectorProps {
   product: Product;
   selection: Selection | null;
   handleSelect: MouseEventHandler<HTMLButtonElement>;
-  //close: MouseEventHandler<HTMLButtonElement>;
 }
 
-const getCardQuantityLabel = (quantity: number) => {
+export const getCardQuantityLabel = (quantity: number) => {
   if (quantity === 0) {
     return 'Out of stock';
   } else if (quantity < 3) {

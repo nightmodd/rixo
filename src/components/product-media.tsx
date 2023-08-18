@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Thumbs } from 'swiper/modules';
@@ -14,10 +15,18 @@ interface productProps {
   images: string[];
 }
 const ProductMedia = ({ images }: productProps) => {
-  //maybe all removed
+  const params = useParams<{ title: string; id: string }>();
+  const title = params.title;
   const showcaseRef = useRef<any>(null);
   const [activeImgID, setActiveImgID] = useState<number>(0);
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
+
+  useEffect(() => {
+    if (showcaseRef.current) {
+      showcaseRef.current.swiper.slideTo(0);
+      setActiveImgID(0);
+    }
+  }, [title]);
 
   const selectActiveImg = (e: React.MouseEvent<HTMLButtonElement>) => {
     const target = e.target as HTMLButtonElement;

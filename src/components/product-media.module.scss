@@ -7,7 +7,6 @@
   display: grid;
   grid-template-columns: 100px 1fr;
   padding-left: 24px;
-  margin-bottom: 4rem;
   gap: 24px;
 }
 
@@ -54,7 +53,7 @@
 }
 .slider_item {
   position: relative;
-  width: 100%;
+  height: 100%;
   border: solid 3px transparent;
 
   button {
@@ -67,7 +66,6 @@
     img {
       height: 100%;
       width: 100%;
-
       object-fit: cover;
     }
   }
@@ -92,15 +90,12 @@
 }
 .images_showcase {
   width: 100%;
-
   img {
     display: block;
     width: 100%;
-    height: 100%;
     object-fit: fill;
   }
 }
-
 
 @media screen and (max-width: 100rem) {
   .product_media_section {
