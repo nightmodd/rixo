@@ -10,7 +10,6 @@ import Input from '../UI/input';
 import Button from '../UI/button';
 
 import styles from './auth-pages.module.scss';
-import classes from '../UI/input.module.scss';
 
 type FormData = {
     name: string;
@@ -20,7 +19,7 @@ type FormData = {
 };
 
 const RegisterForm: React.FC = () => {
-    const [errorMessage, setErrorMessage] = useState<string>('');
+    const [, setErrorMessage] = useState<string>('');
     const navigate = useNavigate();
     const { signup } = useContext(AuthContext);
 
