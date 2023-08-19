@@ -74,7 +74,7 @@ const SpecificSection = ({
         })}
         data-description={sectionName}
       >
-        <p>{details[sectionName]}</p>
+        <p>{sectionName === 'fit' ? details.fit : details.fabric}</p>
         <ul className={styles.description_list}>
           {arrayOfDetails.map((detail) => (
             <li key={detail}>{detail}</li>

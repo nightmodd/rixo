@@ -58,7 +58,6 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-
   flex-wrap: wrap;
   gap: 0.75rem;
 }
@@ -105,5 +104,13 @@
     font-size: 0.8rem;
     font-weight: 400;
     letter-spacing: 0.06em;
+  }
+}
+
+@media screen and (max-width: 62.5rem) {
+  .product_details {
+    padding: 0 0.5rem;
+    max-width: 46.875rem;
+    margin: auto;
   }
 }
