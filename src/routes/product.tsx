@@ -25,21 +25,22 @@ const Products = () => {
   const data = useLoaderData() as Product[];
 
   return (
-    <div className={styles.main_content}>
-      <div className={styles.header}>
-        <Link to="/">Home</Link>
-        <i className="fa-solid fa-angle-right"></i>
-        <Link to={`/collections/${id}`}>{id}</Link>
-        <i className="fa-solid fa-angle-right"></i>
-        <span>{productName}</span>
-      </div>
-
-      <div className={styles.product_container}>
-        <ProductMedia images={data[0].images} />
-        <ProductDetails product={data[0]} id={id} />
+    <>
+      <div className={styles.main_content}>
+        <div className={styles.header}>
+          <Link to="/">Home</Link>
+          <i className="fa-solid fa-angle-right"></i>
+          <Link to={`/collections/${id}`}>{id}</Link>
+          <i className="fa-solid fa-angle-right"></i>
+          <span>{productName}</span>
+        </div>
+        <div className={styles.product_container}>
+          <ProductMedia images={data[0].images} />
+          <ProductDetails product={data[0]} id={id} />
+        </div>
       </div>
       <ProductFooterSection />
-    </div>
+    </>
   );
 };
 
@@ -48,6 +49,7 @@ export default Products;
 export const getProductData = async ({ params }: LoaderFunctionArgs) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const id: string = params.id!;
+  console.log(id);
   const title = params.title;
   const resolvedQuery = query(collection(db, id), where('id', '==', title));
   const querySnapshot = await getDocs(resolvedQuery);
