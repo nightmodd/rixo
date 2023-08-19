@@ -14,9 +14,11 @@ const AuthContext = React.createContext({
   currentUser: null,
   signup: (email: string, password: string, wholeData: any) => {
     console.log('signup');
+    console.log(wholeData + '\n' + email + '\n' + password);
   },
   signin: (email: string, password: string) => {
     console.log('signin');
+    console.log(email + '\n' + password);
   },
   logout: () => {
     console.log('signout');

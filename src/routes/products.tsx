@@ -40,7 +40,7 @@ const Products = () => {
   const [mobileData, setMobileData] = useState<Product | null>(null);
   const [selection, setSelection] = useState<Selection | null>(null);
   const [sortBy, setSortBy] = useState<Array<string> | null>(null);
-  const [sortOption, setSortOption] = useState<string | null>(null);
+  const [sortOption, setSortOption] = useState<string >("");
   const [tempFilters, setTempFilters] = useState<Array<AppliedFilter> | null>(
     []
   );

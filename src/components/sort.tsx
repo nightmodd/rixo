@@ -29,7 +29,7 @@ const SortMenu: React.FC<sortProps> = ({ change, sortOption }) => {
   const onChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     const sortOption = sortInterface[value as keyof typeof sortInterface];
-    change(sortOption);
+    change(sortOption as [string, string]);
   };
 
   return (

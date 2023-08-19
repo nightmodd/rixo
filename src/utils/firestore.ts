@@ -7,7 +7,6 @@ import {
   QuerySnapshot,
   startAfter,
   orderBy,
-  where,
   QueryDocumentSnapshot,
 } from 'firebase/firestore';
 //import { AppliedFilter } from '../components/applied-filter';
