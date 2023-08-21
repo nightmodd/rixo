@@ -16,7 +16,7 @@ type FormData = {
 };
 
 const LoginForm: React.FC = () => {
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [, setErrorMessage] = useState<string>('');
   const navigate = useNavigate();
   const { signin, googleSignIn } = useContext(AuthContext);
 
