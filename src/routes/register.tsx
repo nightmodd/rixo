@@ -19,7 +19,7 @@ type FormData = {
 };
 
 const RegisterForm: React.FC = () => {
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [, setErrorMessage] = useState<string>('');
   const navigate = useNavigate();
   const { signup } = useContext(AuthContext);
 
