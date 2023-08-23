@@ -16,7 +16,6 @@
   margin-top: 6rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 .upper_section {
   position: relative;
@@ -27,7 +26,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
   font-family: 'Biennale';
   font-size: 0.75rem;
   color: #a8472f;
@@ -141,7 +139,6 @@
   grid-auto-rows: minmax(350, auto);
 }
 
-
 .product_card {
   position: relative;
   width: 100%;
@@ -250,11 +247,9 @@
 }
 
 @media screen and (max-width: 92.5rem) {
-
   .lower_section {
     width: 100%;
   }
-
   .product_sizes {
     padding: 0.5rem;
   }
@@ -269,16 +264,13 @@
   }
 }
 @media screen and (max-width: 75rem) {
-
   .products_section {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 @media screen and (max-width: 62.5rem) {
-
-  .main_content{
-    margin-top: 2.5rem;
-
+  .main_content {
+    margin-top: 2rem;
   }
   .product_sizes {
     padding: 0.5rem;
@@ -286,7 +278,6 @@
 }
 
 @media screen and (max-width: 51rem) {
-
   .secondryNav {
     display: flex;
     position: fixed;
@@ -543,7 +534,8 @@
 
 @media screen and (max-width: 31.25rem) {
   .main_content {
-    margin-top: 1.5rem;
+    margin-top: 4rem;
+
     .title {
       font-size: 2rem;
       font-weight: 300;
@@ -564,5 +556,3 @@
     grid-template-columns: repeat(1, 1fr);
   }
 }
-
-

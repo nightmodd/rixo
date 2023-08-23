@@ -23,6 +23,9 @@ import bagImage from '../assets/shopping_bag.svg';
 import styles from './products.module.scss';
 import clsx from 'clsx';
 
+export interface Selection extends Size {
+  productId: string;
+}
 
 const relatedProducts = [
   {
@@ -43,12 +46,6 @@ const relatedProducts = [
   },
 ];
 
-
-export interface Selection extends Size {
-  productId: string;
-}
-
-
 const Products = () => {
   const params = useParams<{ id: string }>();
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -63,7 +60,7 @@ const Products = () => {
   const [mobileData, setMobileData] = useState<Product | null>(null);
   const [selection, setSelection] = useState<Selection | null>(null);
   const [sortBy, setSortBy] = useState<Array<string> | null>(null);
-  const [sortOption, setSortOption] = useState<string >("");
+  const [sortOption, setSortOption] = useState<string | null>(null);
   const [tempFilters, setTempFilters] = useState<Array<AppliedFilter> | null>(
     []
   );
@@ -326,16 +323,16 @@ const Products = () => {
 
           <span className={styles.title}>{id}</span>
           <p className={styles.description}>
-            These are the only Unique data that we have.
+            This is the best store in the whole world
           </p>
-          { 
+          {
             <ul className={styles.related_products}>
-               {relatedProducts.map((product) => (
-                  <li key={product.title}>
-                      <Link to={product.path}>{product.title}</Link>
-                   </li>
-               ))}
-          </ul> 
+              {relatedProducts.map((product) => (
+                <li key={product.title}>
+                  <Link to={product.path}>{product.title}</Link>
+                </li>
+              ))}
+            </ul>
           }
         </div>
 
@@ -442,7 +439,7 @@ const Products = () => {
 
         {paginationState.hasMore && (
           <div ref={loadingAnimation}>
-              <LoadingAnimation />
+            <LoadingAnimation />
           </div>
         )}
       </div>
