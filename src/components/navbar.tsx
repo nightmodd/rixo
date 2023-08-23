@@ -1,5 +1,7 @@
 import { useState, useRef, MouseEventHandler } from 'react';
 import { Link } from 'react-router-dom';
+import SenondaryNavigation from './secondary-navbar';
+import bag from '../assets/shopping-bag.svg';
 
 import styles from './navbar.module.scss';
 import clsx from 'clsx';
@@ -552,12 +554,10 @@ const MainNavigation = () => {
 
   const openMenuForDesktop = () => {
     setShowSubmenu(true);
-    console.log('open menu for desktop');
   };
 
   const closeMenuForDesktop = () => {
     setShowSubmenu(false);
-    console.log('close menu for desktop');
   };
 
   const closeAll = () => {
@@ -586,14 +586,15 @@ const MainNavigation = () => {
   return (
     <header className={styles.header}>
       <nav className={styles.desktop_nav}>
-        <ul
-          className={styles.links}
-          onMouseEnter={openMenuForDesktop}
-          onMouseLeave={closeMenuForDesktop}
-        >
+        <SenondaryNavigation />
+        <ul className={styles.links}>
           {dropdownLinks.map((item) => {
             return (
-              <li key={item.title}>
+              <li
+                key={item.title}
+                onMouseEnter={item.sublinks ? openMenuForDesktop : undefined}
+                onMouseLeave={closeMenuForDesktop}
+              >
                 <Link
                   to={item.path}
                   className={styles.desktop_mainlinks}
@@ -652,17 +653,34 @@ const MainNavigation = () => {
             );
           })}
         </ul>
-        <div className={`${styles.backdrop} ${styles.hidden} `}></div>
+        <div
+          className={clsx({
+            [styles.backdrop]: true,
+            [styles.hidden]: !showSubmenu,
+          })}
+        ></div>
       </nav>
 
       <nav className={styles.mobile_nav}>
-        <button className={styles.hamburger} onClick={toggleMobileMenu}>
-          {showMobileMenu === true ? (
-            <i className="fa-solid fa-xmark"></i>
-          ) : (
-            <i className="fa-solid fa-bars"></i>
-          )}
-        </button>
+        <Link to="/" className={styles.logo}>
+          <span>RIXO</span>
+        </Link>
+        <div className={styles.mobile_navbar_rightside}>
+          <button
+            onClick={() => {
+              console.log('bag');
+            }}
+          >
+            <img src={bag} alt="shopping bag" />
+          </button>
+          <button className={styles.hamburger} onClick={toggleMobileMenu}>
+            {showMobileMenu === true ? (
+              <i className="fa-solid fa-xmark"></i>
+            ) : (
+              <i className="fa-solid fa-bars"></i>
+            )}
+          </button>
+        </div>
 
         <div
           className={clsx({
@@ -672,90 +690,100 @@ const MainNavigation = () => {
           })}
           ref={backdropMobile}
         ></div>
-        <>
-          <ul
-            className={clsx({
-              [styles.mobile_links]: true,
-              [styles.opened]: showMobileMenu,
-              [styles.closed]: !showMobileMenu,
-            })}
-          >
-            {dropdownLinks.map((item) => {
-              return (
-                <li
-                  key={item.title}
-                  className={item.sublinks ? 'has-children' : ''}
-                >
-                  <button className={styles.main_links} onClick={toggleSubmenu}>
-                    {item.title}
-                  </button>
-                  {item.sublinks && (
-                    <div
-                      className={clsx({
-                        [styles.submenus_container]: true,
-                        [styles.mobile_hidden]: true,
-                      })}
-                    >
-                      <button
-                        className={styles.back_button}
-                        onClick={closeSubmenu}
-                      >
-                        <i className="fa-solid fa-arrow-left-long"></i>
-                        {'  '}
-                        Back to main menu
-                      </button>
-                      {item.sublinks.map((subitem) => (
-                        <ul className={`${styles.submenu_mobile} `}>
-                          <h5>
-                            <Link to={subitem.path} onClick={closeAll}>
-                              {subitem.title}
-                            </Link>
-                          </h5>
 
-                          {subitem.sublinks &&
-                            subitem.sublinks.map((subsubitem) => (
-                              <li key={subsubitem.title}>
-                                <Link
-                                  to={subsubitem.path}
-                                  className="submenu_link"
-                                  onClick={closeAll}
-                                >
-                                  {subsubitem.title}
-                                </Link>
-                              </li>
-                            ))}
-                        </ul>
-                      ))}
-                      {item.featured && (
-                        <div className={styles.featured}>
-                          {item.featured.slice(0, 3).map((featureditem) => {
-                            return (
+        <ul
+          className={clsx({
+            [styles.mobile_links]: true,
+            [styles.opened]: showMobileMenu,
+            [styles.closed]: !showMobileMenu,
+          })}
+        >
+          {dropdownLinks.map((item) => {
+            return (
+              <li
+                key={item.title}
+                className={item.sublinks ? 'has-children' : ''}
+              >
+                <button className={styles.main_links} onClick={toggleSubmenu}>
+                  {item.title}
+                </button>
+                {item.sublinks && (
+                  <div
+                    className={clsx({
+                      [styles.submenus_container]: true,
+                      [styles.mobile_hidden]: true,
+                    })}
+                  >
+                    <button
+                      className={styles.back_button}
+                      onClick={closeSubmenu}
+                    >
+                      <i className="fa-solid fa-arrow-left-long"></i>
+                      Back to main menu
+                    </button>
+                    {item.sublinks.map((subitem) => (
+                      <ul className={`${styles.submenu_mobile} `}>
+                        <h5>
+                          <Link to={subitem.path} onClick={closeAll}>
+                            {subitem.title}
+                          </Link>
+                        </h5>
+
+                        {subitem.sublinks &&
+                          subitem.sublinks.map((subsubitem) => (
+                            <li key={subsubitem.title}>
                               <Link
-                                to={featureditem.path}
-                                className={styles.featured_item}
+                                to={subsubitem.path}
+                                className="submenu_link"
                                 onClick={closeAll}
                               >
-                                <div className={styles.featured_item_upper}>
-                                  <img
-                                    src={featureditem.image}
-                                    alt={featureditem.title}
-                                  />
-                                  <i className="fa-solid fa-arrow-right-long"></i>
-                                </div>
-
-                                <span>{featureditem.title}</span>
+                                {subsubitem.title}
                               </Link>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </li>
-              );
-            })}
+                            </li>
+                          ))}
+                      </ul>
+                    ))}
+                    {item.featured && (
+                      <div className={styles.featured}>
+                        {item.featured.slice(0, 3).map((featureditem) => {
+                          return (
+                            <Link
+                              to={featureditem.path}
+                              className={styles.featured_item}
+                              onClick={closeAll}
+                            >
+                              <div className={styles.featured_item_upper}>
+                                <img
+                                  src={featureditem.image}
+                                  alt={featureditem.title}
+                                />
+                                <i className="fa-solid fa-arrow-right-long"></i>
+                              </div>
+
+                              <span>{featureditem.title}</span>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </li>
+            );
+          })}
+          <ul className={styles.user_navigation_list}>
+            <li>
+              <Link to={'/login'} onClick={closeAll}>
+                Log In
+              </Link>
+            </li>
+            <li>
+              <Link to={'/Register'} onClick={closeAll}>
+                Sign Up
+              </Link>
+            </li>
           </ul>
-        </>
+        </ul>
       </nav>
     </header>
   );

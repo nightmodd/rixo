@@ -1,11 +1,10 @@
 .outer_container {
   position: fixed;
   width: 100vw;
-  height: 70vh;
-  top: 3.2rem;
+  height: 75vh;
+  top: 7rem;
   left: 0;
   min-height: 30rem;
-
   background-image: url('//cdn.shopify.com/s/files/1/0327/1609/5533/files/account-top-left_375x.png?v=1672932330');
   background-size: 130px;
   background-repeat: no-repeat;
@@ -35,7 +34,7 @@
   margin: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 
   .form_container {
@@ -90,7 +89,7 @@
 
 @media screen and (min-width: 62.5rem) {
   .outer_container {
-    margin-top: 5%;
+    top: 10rem;
     background-size: 220px;
     &::before {
       background-size: 170px;
@@ -98,7 +97,6 @@
   }
   .inner_container span {
     font-size: 4.5rem;
-    line-height: 4.625rem;
   }
 
   .navigation {
