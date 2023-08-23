@@ -1,4 +1,4 @@
-.secondry_nav {
+secondry_nav {
   display: flex;
   height: fit-content;
   justify-content: space-between;
@@ -35,7 +35,7 @@
     z-index: 60;
     li {
       width: 100%;
-
+   
       cursor: pointer;
       &:hover {
         background-color: rgba(211, 149, 98, 0.662);

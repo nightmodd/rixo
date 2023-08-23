@@ -693,84 +693,87 @@ const MainNavigation = () => {
 
         <ul
           className={clsx({
-            [styles.mobile_links]: true,
+            [styles.mobile_links_container]: true,
             [styles.opened]: showMobileMenu,
             [styles.closed]: !showMobileMenu,
           })}
         >
-          {dropdownLinks.map((item) => {
-            return (
-              <li
-                key={item.title}
-                className={item.sublinks ? 'has-children' : ''}
-              >
-                <button className={styles.main_links} onClick={toggleSubmenu}>
-                  {item.title}
-                </button>
-                {item.sublinks && (
-                  <div
-                    className={clsx({
-                      [styles.submenus_container]: true,
-                      [styles.mobile_hidden]: true,
-                    })}
-                  >
-                    <button
-                      className={styles.back_button}
-                      onClick={closeSubmenu}
+          
+          <div className={styles.mobile_links}>
+            {dropdownLinks.map((item) => {
+              return (
+                <li
+                  key={item.title}
+                  className={item.sublinks ? 'has-children' : ''}
+                >
+                  <button className={styles.main_links} onClick={toggleSubmenu}>
+                    {item.title}
+                  </button>
+                  {item.sublinks && (
+                    <div
+                      className={clsx({
+                        [styles.submenus_container]: true,
+                        [styles.mobile_hidden]: true,
+                      })}
                     >
-                      <i className="fa-solid fa-arrow-left-long"></i>
-                      Back to main menu
-                    </button>
-                    {item.sublinks.map((subitem) => (
-                      <ul className={`${styles.submenu_mobile} `}>
-                        <h5>
-                          <Link to={subitem.path} onClick={closeAll}>
-                            {subitem.title}
-                          </Link>
-                        </h5>
+                      <button
+                        className={styles.back_button}
+                        onClick={closeSubmenu}
+                      >
+                        <i className="fa-solid fa-arrow-left-long"></i>
+                        Back to main menu
+                      </button>
+                      {item.sublinks.map((subitem) => (
+                        <ul className={`${styles.submenu_mobile} `}>
+                          <h5>
+                            <Link to={subitem.path} onClick={closeAll}>
+                              {subitem.title}
+                            </Link>
+                          </h5>
 
-                        {subitem.sublinks &&
-                          subitem.sublinks.map((subsubitem) => (
-                            <li key={subsubitem.title}>
+                          {subitem.sublinks &&
+                            subitem.sublinks.map((subsubitem) => (
+                              <li key={subsubitem.title}>
+                                <Link
+                                  to={subsubitem.path}
+                                  className="submenu_link"
+                                  onClick={closeAll}
+                                >
+                                  {subsubitem.title}
+                                </Link>
+                              </li>
+                            ))}
+                        </ul>
+                      ))}
+                      {item.featured && (
+                        <div className={styles.featured}>
+                          {item.featured.slice(0, 3).map((featureditem) => {
+                            return (
                               <Link
-                                to={subsubitem.path}
-                                className="submenu_link"
+                                to={featureditem.path}
+                                className={styles.featured_item}
                                 onClick={closeAll}
                               >
-                                {subsubitem.title}
-                              </Link>
-                            </li>
-                          ))}
-                      </ul>
-                    ))}
-                    {item.featured && (
-                      <div className={styles.featured}>
-                        {item.featured.slice(0, 3).map((featureditem) => {
-                          return (
-                            <Link
-                              to={featureditem.path}
-                              className={styles.featured_item}
-                              onClick={closeAll}
-                            >
-                              <div className={styles.featured_item_upper}>
-                                <img
-                                  src={featureditem.image}
-                                  alt={featureditem.title}
-                                />
-                                <i className="fa-solid fa-arrow-right-long"></i>
-                              </div>
+                                <div className={styles.featured_item_upper}>
+                                  <img
+                                    src={featureditem.image}
+                                    alt={featureditem.title}
+                                  />
+                                  <i className="fa-solid fa-arrow-right-long"></i>
+                                </div>
 
-                              <span>{featureditem.title}</span>
-                            </Link>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </li>
-            );
-          })}
+                                <span>{featureditem.title}</span>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+          </div>
           <ul className={styles.user_navigation_list}>
             <li>
               <Link to={'/login'} onClick={closeAll}>
