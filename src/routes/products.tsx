@@ -8,13 +8,32 @@ import {
 } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import SizesSelector from '../components/size-selector';
+import LoadingAnimation from '../components/loading-animation';
 import { PaginationState, Product, Size } from '../types/listing';
 import { fetchCollection } from '../utils/firestore';
 
 import bagImage from '../assets/shopping_bag.svg';
 import styles from './products.module.scss';
 import clsx from 'clsx';
-import { QueryDocumentSnapshot } from 'firebase/firestore';
+
+const relatedProducts = [
+  {
+    title: 'Clothing',
+    path: '/collections/clothing',
+  },
+  {
+    title: 'Skirts',
+    path: '/collections/skirts',
+  },
+  {
+    title: 'Tops',
+    path: '/collections/tops',
+  },
+  {
+    title: 'Bridal',
+    path: '/collections/bridal',
+  },
+];
 
 export interface Selection extends Size {
   productId: string;
@@ -149,17 +168,18 @@ const Products = () => {
             <span>{id}</span>
           </div>
         </div>
+
         <span className={styles.title}>{id}</span>
         <p className={styles.description}>
-          This is the best store in the whole world
+          These are the only Unique data that we have.
         </p>
-        {/* <ul className={styles.related_products}>
+        { <ul className={styles.related_products}>
           {relatedProducts.map((product) => (
             <li key={product.title}>
               <Link to={product.path}>{product.title}</Link>
             </li>
           ))}
-        </ul> */}
+        </ul> }
       </div>
 
       <div className={styles.lower_section}>
@@ -245,17 +265,8 @@ const Products = () => {
       </div>
 
       {paginationState.hasMore && (
-        <div className={styles.loading} ref={loadingAnimation}>
-          <div className={styles.wave}></div>
-          <div className={styles.wave}></div>
-          <div className={styles.wave}></div>
-          <div className={styles.wave}></div>
-          <div className={styles.wave}></div>
-          <div className={styles.wave}></div>
-          <div className={styles.wave}></div>
-          <div className={styles.wave}></div>
-          <div className={styles.wave}></div>
-          <div className={styles.wave}></div>
+        <div ref={loadingAnimation}>
+          <LoadingAnimation />
         </div>
       )}
     </div>

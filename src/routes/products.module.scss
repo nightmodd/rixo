@@ -1,7 +1,7 @@
 .main_content {
   position: relative;
   width: 100%;
-  margin-top: 2.5rem;
+  margin-top: 6rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,6 +15,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 0.5rem;
   font-family: 'Biennale';
   font-size: 0.75rem;
   color: #a8472f;
@@ -231,6 +232,9 @@
   }
 }
 @media screen and (max-width: 62.5rem) {
+  .main_content{
+    margin-top: 2.5rem;
+  }
   .product_sizes {
     padding: 0.5rem;
   }
@@ -335,6 +339,7 @@
 
 @media screen and (max-width: 31.25rem) {
   .main_content {
+    margin-top: 1.5rem;
     .title {
       font-size: 2rem;
       font-weight: 300;
@@ -356,57 +361,3 @@
   }
 }
 
-//for loading animation
-.loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.wave {
-  width: 5px;
-  height: 100px;
-  background: linear-gradient(45deg, #a8472f, #fff);
-  margin: 10px;
-  animation: wave 1s linear infinite;
-  border-radius: 20px;
-  z-index: 10;
-}
-.wave:nth-child(2) {
-  animation-delay: 0.1s;
-}
-.wave:nth-child(3) {
-  animation-delay: 0.2s;
-}
-.wave:nth-child(4) {
-  animation-delay: 0.3s;
-}
-.wave:nth-child(5) {
-  animation-delay: 0.4s;
-}
-.wave:nth-child(6) {
-  animation-delay: 0.5s;
-}
-.wave:nth-child(7) {
-  animation-delay: 0.6s;
-}
-.wave:nth-child(8) {
-  animation-delay: 0.7s;
-}
-.wave:nth-child(9) {
-  animation-delay: 0.8s;
-}
-.wave:nth-child(10) {
-  animation-delay: 0.9s;
-}
-
-@keyframes wave {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(0);
-  }
-}
