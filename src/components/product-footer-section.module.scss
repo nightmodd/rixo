@@ -1,0 +1,29 @@
+.product_footer_section {
+  width: 100%;
+  display: flex;
+  margin-top: 2.5rem;
+  padding: 1rem 0;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 3px solid yellow;
+  border-bottom: 3px solid yellow;
+}
+
+.footer_item {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+@media (max-width: 62.5rem) {
+  .product_footer_section {
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+}
