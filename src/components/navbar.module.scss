@@ -244,6 +244,9 @@ ul {
 
   .mobile_nav {
     position: fixed;
+    background-color: #fffcee;
+    width: 100vw;
+    height: 3.5rem;
     top: 0;
     right: 0;
     width: 100vw;
@@ -339,7 +342,7 @@ ul {
     scroll-behavior: smooth;
     transition: transform 0.3s ease-in-out;
     transform: translateX(0);
-    z-index: 50;
+    z-index: 40;
 
     &.mobile_hidden {
       transform: translateX(100%);
