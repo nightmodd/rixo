@@ -2,8 +2,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 3rem;
+  height: 3rem;
   display: flex;
   gap: 0.25rem;
   align-items: center;
@@ -92,7 +92,7 @@
   gap: 0.5rem;
   align-items: center;
   justify-content: center;
- 
+
   margin-bottom: 1rem;
 }
 .circle {
@@ -132,8 +132,8 @@
 
 @media screen and (max-width: 62.5rem) {
   .size {
-    width: 2rem;
-    height: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
     font-size: 0.7rem;
   }
   .add_to_cart_btn {
