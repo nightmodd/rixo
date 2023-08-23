@@ -3,7 +3,7 @@
   width: 100%;
   max-width: 1580px;
   margin: auto;
-  margin-top: 1rem;
+  margin-top: 5.5rem;
   display: flex;
   flex-direction: column;
 }
@@ -43,8 +43,6 @@
   position: relative;
 }
 
-.details_section {
-}
 @media screen and (max-width: 62.5rem) {
   .main_content {
     margin-top: 2rem;

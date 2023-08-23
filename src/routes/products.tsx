@@ -12,6 +12,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 import SizesSelector from '../components/size-selector';
+import LoadingAnimation from '../components/loading-animation';
 import SortMenu from '../components/sort';
 import FiltersForm from '../components/filters-form';
 import AppliedFilters, { AppliedFilter } from '../components/applied-filter';
@@ -25,6 +26,25 @@ import clsx from 'clsx';
 export interface Selection extends Size {
   productId: string;
 }
+
+const relatedProducts = [
+  {
+    title: 'Clothing',
+    path: '/collections/clothing',
+  },
+  {
+    title: 'Skirts',
+    path: '/collections/skirts',
+  },
+  {
+    title: 'Tops',
+    path: '/collections/tops',
+  },
+  {
+    title: 'Bridal',
+    path: '/collections/bridal',
+  },
+];
 
 const Products = () => {
   const params = useParams<{ id: string }>();
@@ -305,13 +325,15 @@ const Products = () => {
           <p className={styles.description}>
             This is the best store in the whole world
           </p>
-          {/* <ul className={styles.related_products}>
-          {relatedProducts.map((product) => (
-            <li key={product.title}>
-              <Link to={product.path}>{product.title}</Link>
-            </li>
-          ))}
-        </ul> */}
+          {
+            <ul className={styles.related_products}>
+              {relatedProducts.map((product) => (
+                <li key={product.title}>
+                  <Link to={product.path}>{product.title}</Link>
+                </li>
+              ))}
+            </ul>
+          }
         </div>
 
         <div className={styles.lower_section}>
@@ -416,21 +438,12 @@ const Products = () => {
         </div>
 
         {paginationState.hasMore && (
-          <div className={styles.loading} ref={loadingAnimation}>
-            <div className={styles.wave}></div>
-            <div className={styles.wave}></div>
-            <div className={styles.wave}></div>
-            <div className={styles.wave}></div>
-            <div className={styles.wave}></div>
-            <div className={styles.wave}></div>
-            <div className={styles.wave}></div>
-            <div className={styles.wave}></div>
-            <div className={styles.wave}></div>
-            <div className={styles.wave}></div>
+          <div ref={loadingAnimation}>
+            <LoadingAnimation />
           </div>
         )}
       </div>
-
+         
       <div
         className={clsx({
           [styles.mobile_buy]: true,
