@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   useParams,
   Link,
@@ -7,6 +8,7 @@ import {
 import ProductMedia from '../components/product-media';
 import ProductDetails from '../components/product-details';
 import ProductFooterSection from '../components/product-footer-section';
+import LoadingAnimation from '../components/loading-animation';
 import { Product } from '../types/listing';
 
 import { collection, query, getDocs, where } from 'firebase/firestore';
@@ -21,12 +23,19 @@ const Products = () => {
   const productName = title!.split('-').join(' ');
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const id: string = params.id!;
+  const [loading, setLoading] = useState(true);
 
   const data = useLoaderData() as Product[];
+  useEffect(() => {
+    if (data.length > 0) {
+      setLoading(false);
+    }
+  }, [data]);
 
   return (
     <>
       <div className={styles.main_content}>
+        {loading && <LoadingAnimation />}
         <div className={styles.header}>
           <Link to="/">Home</Link>
           <i className="fa-solid fa-angle-right"></i>
