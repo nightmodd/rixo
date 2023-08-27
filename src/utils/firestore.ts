@@ -2,7 +2,6 @@ import {
   collection,
   query,
   limit,
-  Firestore,
   getDocs,
   Query,
   QuerySnapshot,

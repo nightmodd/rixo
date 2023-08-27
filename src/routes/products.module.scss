@@ -1,10 +1,11 @@
 .main_content {
   position: relative;
   width: 100%;
+  max-width: 1580px;
+  margin: auto;
   margin-top: 6rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 .upper_section {
   position: relative;
@@ -232,7 +233,7 @@
   }
 }
 @media screen and (max-width: 62.5rem) {
-  .main_content{
+  .main_content {
     margin-top: 2.5rem;
   }
   .product_sizes {
@@ -360,4 +361,3 @@
     grid-template-columns: repeat(1, 1fr);
   }
 }
-
