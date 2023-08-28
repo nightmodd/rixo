@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import SortMenu from './sort';
 import styles from '../routes/products.module.scss';
 
 const relatedProducts = [
@@ -19,7 +20,14 @@ const relatedProducts = [
     path: '/collections/bridal',
   },
 ];
-const ProductUpperSection = (id: string) => {
+
+interface ProductUpperSectionProps {
+  id: string;
+  sortChangeHandler: (value: string[]) => void;
+  sortOption: string | null;
+}
+const ProductUpperSection = (props: ProductUpperSectionProps) => {
+  const { id, sortChangeHandler, sortOption } = props;
   return (
     <div className={styles.upper_section}>
       <div className={styles.header}>
@@ -27,6 +35,9 @@ const ProductUpperSection = (id: string) => {
           <Link to="/">Home</Link>
           <i className="fa-solid fa-angle-right"></i>
           <span>{id}</span>
+        </div>
+        <div className={styles.header_right}>
+          <SortMenu change={sortChangeHandler} sortOption={sortOption} />
         </div>
       </div>
 
