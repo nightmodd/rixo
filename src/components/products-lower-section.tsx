@@ -49,6 +49,7 @@ const FilterSection = (props: FilterSectionProps) => {
 };
 
 interface ProductLowerSectionProps {
+  id: string;
   paginationState: PaginationState<Product>;
   selection: Selection | null;
   handleSelect: MouseEventHandler<HTMLButtonElement>;
@@ -64,6 +65,7 @@ interface ProductLowerSectionProps {
 
 const ProductLowerSection = (props: ProductLowerSectionProps) => {
   const {
+    id,
     paginationState,
     selection,
     handleSelect,
@@ -98,7 +100,10 @@ const ProductLowerSection = (props: ProductLowerSectionProps) => {
             onMouseLeave={mouseLeave}
           >
             <div className={styles.action_container}>
-              <Link to={'/'} className={styles.product_images}>
+              <Link
+                to={`/collections/${id}/${product.id}`}
+                className={styles.product_images}
+              >
                 <img
                   src={product.images[0]}
                   alt="product"
@@ -119,12 +124,18 @@ const ProductLowerSection = (props: ProductLowerSectionProps) => {
 
             <div className={styles.product_details}>
               <div className={styles.product_details_top}>
-                <Link to={'/'} className={styles.product_name}>
+                <Link
+                  to={`/collections/${id}/${product.id}`}
+                  className={styles.product_name}
+                >
                   {product.name}
                 </Link>
               </div>
               <div className={styles.product_details_bottom}>
-                <Link to={'/'} className={styles.product_price}>
+                <Link
+                  to={`/collections/${id}/${product.id}`}
+                  className={styles.product_price}
+                >
                   {product.currency} {product.price}
                 </Link>
                 <button
