@@ -1,11 +1,52 @@
 import { MouseEventHandler } from 'react';
 import { Link } from 'react-router-dom';
 import SizesSelector from './size-selector';
+import AppliedFilters, { AppliedFilter } from './applied-filter';
+import FiltersForm from './filters-form';
 import bagImage from '../assets/shopping_bag.svg';
 import { PaginationState, Product } from '../types/listing';
 import { Selection } from '../routes/products';
 
 import styles from '../routes/products.module.scss';
+
+interface FilterSectionProps {
+  tempFilters: Array<AppliedFilter> | null;
+  activeFilters: Array<AppliedFilter> | null;
+  addAppliedFilter: (filter: Array<AppliedFilter>) => void;
+  removeFilter: (value: string | Array<string>, filterType: string) => void;
+  clearFilters: () => void;
+  applyFilters: () => void;
+}
+
+const FilterSection = (props: FilterSectionProps) => {
+  const {
+    tempFilters,
+    activeFilters,
+    addAppliedFilter,
+    removeFilter,
+    clearFilters,
+    applyFilters,
+  } = props;
+  return (
+    <>
+      {activeFilters !== null && activeFilters.length > 0 && (
+        <AppliedFilters
+          filters={activeFilters}
+          removeFilter={removeFilter}
+          clearAll={clearFilters}
+        />
+      )}
+
+      <FiltersForm
+        appliedFilters={tempFilters}
+        addAppliedFilter={addAppliedFilter}
+      />
+      <button className={styles.apply_btn} onClick={applyFilters}>
+        Apply Filters
+      </button>
+    </>
+  );
+};
 
 interface ProductLowerSectionProps {
   paginationState: PaginationState<Product>;
@@ -13,6 +54,12 @@ interface ProductLowerSectionProps {
   handleSelect: MouseEventHandler<HTMLButtonElement>;
   showMobileSizes: MouseEventHandler<HTMLButtonElement>;
   mouseLeave: MouseEventHandler<HTMLDivElement>;
+  activeFilters: Array<AppliedFilter> | null;
+  tempFilters: Array<AppliedFilter> | null;
+  addAppliedFilter: (filter: Array<AppliedFilter>) => void;
+  removeFilter: (value: string | Array<string>, filterType: string) => void;
+  clearFilters: () => void;
+  applyFilters: () => void;
 }
 
 const ProductLowerSection = (props: ProductLowerSectionProps) => {
@@ -22,11 +69,26 @@ const ProductLowerSection = (props: ProductLowerSectionProps) => {
     handleSelect,
     showMobileSizes,
     mouseLeave,
+    activeFilters,
+    tempFilters,
+    addAppliedFilter,
+    removeFilter,
+    clearFilters,
+    applyFilters,
   } = props;
 
   return (
     <div className={styles.lower_section}>
-      <div className={styles.filter_section}></div>
+      <div className={styles.filter_section}>
+        <FilterSection
+          activeFilters={activeFilters}
+          tempFilters={tempFilters}
+          addAppliedFilter={addAppliedFilter}
+          removeFilter={removeFilter}
+          clearFilters={clearFilters}
+          applyFilters={applyFilters}
+        />
+      </div>
       <div className={`${styles.products_section} ${styles.grid_4} `}>
         {paginationState.data.map((product) => (
           <div
