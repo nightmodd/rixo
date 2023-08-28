@@ -296,6 +296,7 @@ const Products = () => {
         })}
 
         {ProductLowerSection({
+          id,
           paginationState,
           selection,
           handleSelect,
