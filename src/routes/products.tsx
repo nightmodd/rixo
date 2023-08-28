@@ -5,46 +5,25 @@ import {
   useCallback,
   MouseEventHandler,
 } from 'react';
-import {
-  Link,
-  useParams,
-  useSearchParams,
-  useLocation,
-} from 'react-router-dom';
-import SizesSelector from '../components/size-selector';
-import LoadingAnimation from '../components/loading-animation';
+import { useParams, useSearchParams, useLocation } from 'react-router-dom';
+
 import SortMenu from '../components/sort';
-import FiltersForm from '../components/filters-form';
-import AppliedFilters, { AppliedFilter } from '../components/applied-filter';
+import ProductUpperSection from '../components/products-upper-section';
+import ProductLowerSection from '../components/products-lower-section';
+import ProductsMobileBuy from '../components/products-mobile-buy';
+import LoadingAnimation from '../components/loading-animation';
+import ProductsMobileFilters from '../components/products-mobile-filters';
+
+import { AppliedFilter } from '../components/applied-filter';
 import { PaginationState, Product, Size } from '../types/listing';
 import { fetchCollection } from '../utils/firestore';
 
-import bagImage from '../assets/shopping_bag.svg';
 import styles from './products.module.scss';
 import clsx from 'clsx';
 
 export interface Selection extends Size {
   productId: string;
 }
-
-const relatedProducts = [
-  {
-    title: 'Clothing',
-    path: '/collections/clothing',
-  },
-  {
-    title: 'Skirts',
-    path: '/collections/skirts',
-  },
-  {
-    title: 'Tops',
-    path: '/collections/tops',
-  },
-  {
-    title: 'Bridal',
-    path: '/collections/bridal',
-  },
-];
 
 const Products = () => {
   const params = useParams<{ id: string }>();
@@ -111,6 +90,7 @@ const Products = () => {
   );
 
   useEffect(() => {
+    setSortBy(null);
     fetchData(id, null, sortBy);
   }, [fetchData, id, sortBy]);
 
@@ -252,7 +232,7 @@ const Products = () => {
     setMobileData(null);
   };
 
-  //general handlers
+  //filter and sort handlers
   const sortChangeHandler = (sortBy: string[]) => {
     setSortBy(sortBy);
     setPaginationState({
@@ -267,7 +247,7 @@ const Products = () => {
   };
 
   const removeFilter = (value: string | Array<string>, filterType: string) => {
-    const newFilters = activeFilters?.filter((filter) => {
+    const newFilters = tempFilters?.filter((filter) => {
       if (filterType === 'price') {
         return filter.filterType !== filterType;
       }
@@ -309,133 +289,32 @@ const Products = () => {
       </div>
 
       <div className={styles.main_content} key={id}>
-        <div className={styles.upper_section}>
-          <div className={styles.header}>
-            <div className={styles.header_left}>
-              <Link to="/">Home</Link>
-              <i className="fa-solid fa-angle-right"></i>
-              <span>{id}</span>
-            </div>
-            <div className={styles.header_right}>
-              <SortMenu change={sortChangeHandler} sortOption={sortOption} />
-            </div>
-          </div>
+        {ProductUpperSection({
+          id,
+          sortChangeHandler,
+          sortOption,
+        })}
 
-          <span className={styles.title}>{id}</span>
-          <p className={styles.description}>
-            This is the best store in the whole world
-          </p>
-          {
-            <ul className={styles.related_products}>
-              {relatedProducts.map((product) => (
-                <li key={product.title}>
-                  <Link to={product.path}>{product.title}</Link>
-                </li>
-              ))}
-            </ul>
-          }
-        </div>
+        {ProductLowerSection({
+          paginationState,
+          selection,
+          handleSelect,
+          showMobileSizes,
+          mouseLeave,
+          activeFilters,
+          tempFilters,
+          addAppliedFilter,
+          removeFilter,
+          clearFilters,
+          applyFilters,
+        })}
 
-        <div className={styles.lower_section}>
-          <div className={styles.filter_section}>
-            {activeFilters !== null && activeFilters.length > 0 && (
-              <AppliedFilters
-                filters={activeFilters}
-                removeFilter={removeFilter}
-                clearAll={clearFilters}
-              />
-            )}
-
-            <FiltersForm
-              appliedFilters={tempFilters}
-              addAppliedFilter={addAppliedFilter}
-            />
-            <button className={styles.apply_btn} onClick={applyFilters}>
-              Apply Filters
-            </button>
-          </div>
-          <div className={`${styles.products_section} ${styles.grid_4} `}>
-            {paginationState.data.map((product) => (
-              <div
-                className={styles.product_card}
-                key={product.id}
-                data-id={product.id}
-                onMouseLeave={mouseLeave}
-              >
-                <div className={styles.action_container}>
-                  <Link
-                    to={`/collections/${id}/${product.id}`}
-                    className={styles.product_images}
-                  >
-                    <img
-                      src={product.images[0]}
-                      alt="product"
-                      className={`${styles.images}`}
-                    />
-                    <img
-                      src={product.images[1]}
-                      alt="product"
-                      className={`${styles.hidden_img} ${styles.images}`}
-                    />
-                  </Link>
-                  <SizesSelector
-                    product={product}
-                    selection={selection}
-                    handleSelect={handleSelect}
-                  />
-                </div>
-
-                <div className={styles.product_details}>
-                  <div className={styles.product_details_top}>
-                    <Link to={'/'} className={styles.product_name}>
-                      {product.name}
-                    </Link>
-                  </div>
-                  <div className={styles.product_details_bottom}>
-                    <Link to={'/'} className={styles.product_price}>
-                      {product.currency} {product.price}
-                    </Link>
-                    <button
-                      className={styles.show_sizes_button}
-                      data-id={product.id}
-                      onClick={showMobileSizes}
-                    >
-                      <img src={bagImage} alt="bag" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div
-          className={clsx({
-            [styles.mobile_buy]: true,
-            [styles.show_mobile_buy]: mobileData,
-          })}
-        >
-          <div className={styles.mobile_buy_upper}>
-            <div className={styles.product_details_mobile}>
-              <span className={styles.product_name}>{mobileData?.name}</span>
-              <span className={styles.product_price}>
-                {mobileData?.currency} {mobileData?.price}
-              </span>
-            </div>
-            <button onClick={closeMobileBuy}>
-              <i className="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-          <div className={styles.mobile_buy_bottom}>
-            {mobileData && (
-              <SizesSelector
-                product={mobileData}
-                selection={selection}
-                handleSelect={handleMobileSelect}
-              />
-            )}
-          </div>
-        </div>
+        {ProductsMobileBuy({
+          mobileData,
+          selection,
+          handleMobileSelect,
+          closeMobileBuy,
+        })}
 
         {paginationState.hasMore && (
           <div ref={loadingAnimation}>
@@ -443,34 +322,7 @@ const Products = () => {
           </div>
         )}
       </div>
-         
-      <div
-        className={clsx({
-          [styles.mobile_buy]: true,
-          [styles.show_mobile_buy]: mobileData,
-        })}
-      >
-        <div className={styles.mobile_buy_upper}>
-          <div className={styles.product_details_mobile}>
-            <span className={styles.product_name}>{mobileData?.name}</span>
-            <span className={styles.product_price}>
-              {mobileData?.currency} {mobileData?.price}
-            </span>
-          </div>
-          <button onClick={closeMobileBuy}>
-            <i className="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-        <div className={styles.mobile_buy_bottom}>
-          {mobileData && (
-            <SizesSelector
-              product={mobileData}
-              selection={selection}
-              handleSelect={handleMobileSelect}
-            />
-          )}
-        </div>
-      </div>
+
       <div
         className={clsx({
           [styles.mobile_backdrop]: true,
@@ -485,26 +337,13 @@ const Products = () => {
           [styles.open]: showFiltersMobile,
         })}
       >
-        <div className={styles.mobile_filters_header}>
-          <span>Filters</span>
-          <button onClick={toggleFiltersMobile}>
-            <i className="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-        <div className={styles.filter_form_mobile}>
-          <FiltersForm
-            appliedFilters={tempFilters}
-            addAppliedFilter={addAppliedFilter}
-          />
-        </div>
-        <div className={styles.mobile_filters_bottom}>
-          <button className={styles.mobile_apply_btn} onClick={applyFilters}>
-            Apply Filters
-          </button>
-          <button className={styles.mobile_clear_btn} onClick={clearFilters}>
-            Clear All
-          </button>
-        </div>
+        {ProductsMobileFilters({
+          tempFilters,
+          addAppliedFilter,
+          applyFilters,
+          clearFilters,
+          toggleFiltersMobile,
+        })}
       </div>
     </>
   );
