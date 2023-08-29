@@ -32,6 +32,7 @@ const SizesSelector = ({
 }: SizesSelectorProps) => {
   let counter = 0;
 
+  console.log(product.sizes);
   return (
     <div className={classes.hover_animation} data-id={product.id}>
       <div className={classes.product_sizes}>
@@ -40,7 +41,7 @@ const SizesSelector = ({
           return (
             <button
               onClick={handleSelect}
-              key={size.value}
+              key={`${product.id}-${size.value}`}
               className={clsx({
                 [styles.size]: true,
                 [styles.unavilable]: Number(size.quantity) === 0,

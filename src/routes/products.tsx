@@ -267,7 +267,7 @@ const Products = () => {
 
   const addAppliedFilter = (filters: Array<AppliedFilter>) => {
     setTempFilters(filters);
-    console.log(filters);
+  
   };
 
   const toggleFiltersMobile = () => {
@@ -351,3 +351,6 @@ const Products = () => {
 };
 
 export default Products;
+
+
+
