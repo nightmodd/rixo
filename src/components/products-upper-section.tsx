@@ -23,11 +23,9 @@ const relatedProducts = [
 
 interface ProductUpperSectionProps {
   id: string;
-  sortChangeHandler: (value: string[]) => void;
-  sortOption: string | null;
 }
 const ProductUpperSection = (props: ProductUpperSectionProps) => {
-  const { id, sortChangeHandler, sortOption } = props;
+  const { id } = props;
   return (
     <div className={styles.upper_section}>
       <div className={styles.header}>
@@ -37,7 +35,7 @@ const ProductUpperSection = (props: ProductUpperSectionProps) => {
           <span>{id}</span>
         </div>
         <div className={styles.header_right}>
-          <SortMenu change={sortChangeHandler} sortOption={sortOption} />
+          <SortMenu />
         </div>
       </div>
 
