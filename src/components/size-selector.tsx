@@ -29,18 +29,14 @@ const SizesSelector = ({
   selection,
   handleSelect,
 }: SizesSelectorProps) => {
-  let counter = 0;
-
-  console.log(product.sizes);
   return (
     <div className={classes.hover_animation} data-id={product.id}>
       <div className={classes.product_sizes}>
-        {product.sizes.map((size) => {
-          counter++;
+        {product.sizes.map((size ,index) => {
           return (
             <button
               onClick={handleSelect}
-              key={`${product.id}-${size.value}`}
+              key={`${product.id}-${size.value}-${index}`}
               className={clsx({
                 [styles.size]: true,
                 [styles.unavilable]: Number(size.quantity) === 0,
