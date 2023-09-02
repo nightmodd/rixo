@@ -284,6 +284,7 @@ const Products = () => {
           selection,
           handleMobileSelect,
           closeMobileBuy,
+          id,
         })}
 
         {paginationState.hasMore && (

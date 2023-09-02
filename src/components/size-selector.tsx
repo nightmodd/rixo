@@ -8,13 +8,6 @@ import styles from './size-selector.module.scss';
 import classes from '../routes/products.module.scss';
 import clsx from 'clsx';
 
-interface SizesSelectorProps {
-  product: Product;
-  selection: Selection | null;
-  handleSelect: MouseEventHandler<HTMLButtonElement>;
-  id: string;
-}
-
 export const getCardQuantityLabel = (quantity: number) => {
   if (quantity === 0) {
     return 'Out of stock';
@@ -24,13 +17,15 @@ export const getCardQuantityLabel = (quantity: number) => {
     return 'In Stock';
   }
 };
+interface SizesSelectorProps {
+  id: string;
+  product: Product;
+  selection: Selection | null;
+  handleSelect: MouseEventHandler<HTMLButtonElement>;
+}
 
-const SizesSelector = ({
-  product,
-  selection,
-  handleSelect,
-  id,
-}: SizesSelectorProps) => {
+const SizesSelector = (props: SizesSelectorProps) => {
+  const { id, product, selection, handleSelect } = props;
   return (
     <div className={classes.hover_animation} data-id={product.id}>
       <div className={classes.product_sizes}>

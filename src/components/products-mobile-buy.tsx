@@ -11,10 +11,12 @@ interface ProductsMobileBuyProps {
   selection: Selection | null;
   handleMobileSelect: MouseEventHandler<HTMLButtonElement>;
   closeMobileBuy: MouseEventHandler<HTMLButtonElement>;
+  id: string;
 }
 
 const ProductsMobileBuy = (props: ProductsMobileBuyProps) => {
-  const { mobileData, selection, handleMobileSelect, closeMobileBuy } = props;
+  const { mobileData, selection, handleMobileSelect, closeMobileBuy, id } =
+    props;
   return (
     <div
       className={clsx({
@@ -39,6 +41,7 @@ const ProductsMobileBuy = (props: ProductsMobileBuyProps) => {
             product={mobileData}
             selection={selection}
             handleSelect={handleMobileSelect}
+            id={id}
           />
         )}
       </div>
