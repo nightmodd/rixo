@@ -21,7 +21,9 @@ export const fetchCollection = async <Type>(
   //filters: Array<AppliedFilter> | null
 ): Promise<QuerySnapshot<Type>> => {
   const order = orderKey ? SORT_OPTIONS[orderKey] : null;
-  const sort = order ? orderBy(order[0], order[1]) : orderBy('id');
+  const sort = order
+    ? orderBy(order[0], order[1])
+    : orderBy('id');
   const pagination = cursor ? [startAfter(cursor)] : [];
   /*   const clauses =
     filters?.map((filter) => {

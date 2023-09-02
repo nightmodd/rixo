@@ -12,6 +12,7 @@ interface SizesSelectorProps {
   product: Product;
   selection: Selection | null;
   handleSelect: MouseEventHandler<HTMLButtonElement>;
+  id: string;
 }
 
 export const getCardQuantityLabel = (quantity: number) => {
@@ -28,11 +29,12 @@ const SizesSelector = ({
   product,
   selection,
   handleSelect,
+  id,
 }: SizesSelectorProps) => {
   return (
     <div className={classes.hover_animation} data-id={product.id}>
       <div className={classes.product_sizes}>
-        {product.sizes.map((size ,index) => {
+        {product.sizes.map((size, index) => {
           return (
             <button
               onClick={handleSelect}
@@ -82,7 +84,7 @@ const SizesSelector = ({
               })}
             ></span>
             <Link
-              to={'/'}
+              to={`/collections/${id}/${product.id}`}
               className={clsx({
                 [styles.low_stock]:
                   selection?.quantity < 3 && selection?.quantity !== 0,
