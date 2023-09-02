@@ -6,7 +6,7 @@ import {
   MouseEventHandler,
 } from 'react';
 import { useLocation } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { useParams, useLoaderData, LoaderFunctionArgs } from 'react-router-dom';
 
 import SortMenu from '../components/sort';
 import ProductUpperSection from '../components/products-upper-section';
@@ -54,6 +54,8 @@ const Products = () => {
     cursor: null,
   });
 
+  const data = useLoaderData() as Product[];
+  console.log(data);
   const location = useLocation();
 
   //getting data from firestore
@@ -318,3 +320,11 @@ const Products = () => {
 };
 
 export default Products;
+
+export const getCollectionData = async ({ params }: LoaderFunctionArgs) => {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const id: string = params.id!;
+  const snapshot = await fetchCollection<Product>(id, null, null);
+  const productsData = snapshot.docs.map((doc) => doc.data());
+  return productsData as Product[];
+};
