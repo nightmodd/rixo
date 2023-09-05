@@ -4,12 +4,10 @@ import { SORT_LABELS, SORT_OPTIONS } from '../constants/sort';
 
 import styles from './sort.module.scss';
 
-
 const SortMenu: React.FC = () => {
   const [sort, setSort] = useState<keyof typeof SORT_OPTIONS>('default');
   const navigate = useNavigate();
   const location = useLocation();
-  const selectInput = useRef<HTMLSelectElement>(null);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -32,18 +30,13 @@ const SortMenu: React.FC = () => {
         search: params.toString(),
       });
     }
-    
   };
 
   return (
-    <select
-      className={styles.select_menu}
-      onChange={onChangeHandler}
-      ref={selectInput}
-    >
+    <select className={styles.select_menu} onChange={onChangeHandler}>
       {Object.keys(SORT_OPTIONS).map((key) => (
-        <option key={key} value={key} selected = {key == sort}>
-          {SORT_LABELS[key as keyof typeof SORT_LABELS ]}
+        <option key={key} value={key} selected={key == sort}>
+          {SORT_LABELS[key as keyof typeof SORT_LABELS]}
         </option>
       ))}
     </select>
