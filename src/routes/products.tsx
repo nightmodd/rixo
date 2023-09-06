@@ -5,7 +5,8 @@ import {
   useCallback,
   MouseEventHandler,
 } from 'react';
-import { useParams, useSearchParams, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
+import { useParams, useLoaderData, LoaderFunctionArgs } from 'react-router-dom';
 
 import SortMenu from '../components/sort';
 import ProductUpperSection from '../components/products-upper-section';
@@ -20,6 +21,7 @@ import { fetchCollection } from '../utils/firestore';
 
 import styles from './products.module.scss';
 import clsx from 'clsx';
+import { SORT_OPTIONS } from '../constants/sort';
 
 export interface Selection extends Size {
   productId: string;
@@ -29,8 +31,6 @@ const Products = () => {
   const params = useParams<{ id: string }>();
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const id = params.id!;
-  const [searchParams, setSearchParams] = useSearchParams();
-  const location = useLocation();
 
   const prevId = useRef<string>('');
   const backdropMobile = useRef<HTMLDivElement>(null);
@@ -38,14 +38,12 @@ const Products = () => {
 
   const [mobileData, setMobileData] = useState<Product | null>(null);
   const [selection, setSelection] = useState<Selection | null>(null);
-  const [sortBy, setSortBy] = useState<Array<string> | null>(null);
-  const [sortOption, setSortOption] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<keyof typeof SORT_OPTIONS | null>(null);
   const [tempFilters, setTempFilters] = useState<Array<AppliedFilter> | null>(
     []
   );
   const [activeFilters, setActiveFilters] =
     useState<Array<AppliedFilter> | null>([]);
-
   const [showFiltersMobile, setShowFiltersMobile] = useState(false);
 
   const [paginationState, setPaginationState] = useState<
@@ -56,12 +54,16 @@ const Products = () => {
     cursor: null,
   });
 
+  const data = useLoaderData() as Product[];
+  console.log(data);
+  const location = useLocation();
+
   //getting data from firestore
   const fetchData = useCallback(
     async (
       id: string,
       cursor: PaginationState<Product>['cursor'],
-      order: Array<any> | null
+      order: keyof typeof SORT_OPTIONS | null
     ) => {
       const revalidate = prevId.current !== id;
 
@@ -90,10 +92,20 @@ const Products = () => {
   );
 
   useEffect(() => {
-    setSortBy(null);
+    if (prevId.current !== id) {
+      setPaginationState({
+        data: [],
+        hasMore: true,
+        cursor: null,
+      });
+    }
+  }, [id]);
+
+  useEffect(() => {
     fetchData(id, null, sortBy);
   }, [fetchData, id, sortBy]);
 
+  // infinite scroll
   useEffect(() => {
     const loading = loadingAnimation.current;
     if (loading === null) return;
@@ -118,60 +130,28 @@ const Products = () => {
     };
   }, [fetchData, id, paginationState.cursor, sortBy]);
 
+  //getting sort from url
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const sort = searchParams.get('sort');
-    const filters = searchParams.get('filters');
-    console.log(sort, filters);
     if (sort) {
-      if (sort === 'price-asc') {
-        setSortOption('lowToHigh');
-        setSortBy(['price', 'asc']);
+      if (sort === 'lowToHigh') {
+        setSortBy('lowToHigh');
       }
-      if (sort === 'price-desc') {
-        setSortOption('highToLow');
-        setSortBy(['price', 'desc']);
+      if (sort === 'highToLow') {
+        setSortBy('highToLow');
       }
-      if (sort === 'name-asc') {
-        setSortOption('A-Z');
-        setSortBy(['name', 'asc']);
+      if (sort === 'A-Z') {
+        setSortBy('A-Z');
       }
-      if (sort === 'name-desc') {
-        setSortOption('Z-A');
-        setSortBy(['name', 'desc']);
+      if (sort === 'Z-A') {
+        setSortBy('Z-A');
       }
-      if (sort === '') {
-        setSortOption('default');
-        setSortBy(['id', 'asc']);
+      if (sort === 'default') {
+        setSortBy('default');
       }
     }
-  }, [location.search]);
-
-  useEffect(() => {
-    if (sortBy !== null) {
-      searchParams.set('sort', sortBy.join('-'));
-      setSearchParams(searchParams);
-    }
-    if (activeFilters !== null && activeFilters.length > 0) {
-      searchParams.set(
-        'filters',
-        activeFilters
-          .map((filter) => {
-            return `${filter.filterType}_${filter.value}`;
-          })
-          .join(`--`)
-      );
-      setSearchParams(searchParams);
-    }
-    if (activeFilters?.length === 0 || activeFilters === null) {
-      searchParams.delete('filters');
-      setSearchParams(searchParams);
-    }
-    if (sortBy === null) {
-      searchParams.delete('sort');
-      setSearchParams(searchParams);
-    }
-  }, [sortBy, activeFilters, searchParams, setSearchParams]);
+  }, [location]);
 
   //handlers  for the desktop version
   const mouseLeave = () => {
@@ -232,15 +212,7 @@ const Products = () => {
     setMobileData(null);
   };
 
-  //filter and sort handlers
-  const sortChangeHandler = (sortBy: string[]) => {
-    setSortBy(sortBy);
-    setPaginationState({
-      data: [],
-      hasMore: true,
-      cursor: null,
-    });
-  };
+  //filter handlers
 
   const applyFilters = () => {
     setActiveFilters(tempFilters);
@@ -267,7 +239,6 @@ const Products = () => {
 
   const addAppliedFilter = (filters: Array<AppliedFilter>) => {
     setTempFilters(filters);
-  
   };
 
   const toggleFiltersMobile = () => {
@@ -281,7 +252,7 @@ const Products = () => {
   return (
     <>
       <div className={styles.secondryNav}>
-        <SortMenu change={sortChangeHandler} sortOption={sortOption} />
+        <SortMenu />
         <button className={styles.filterButton} onClick={toggleFiltersMobile}>
           Filter
           <i className="fa-solid fa-angle-down"></i>
@@ -291,8 +262,6 @@ const Products = () => {
       <div className={styles.main_content} key={id}>
         {ProductUpperSection({
           id,
-          sortChangeHandler,
-          sortOption,
         })}
 
         {ProductLowerSection({
@@ -315,6 +284,7 @@ const Products = () => {
           selection,
           handleMobileSelect,
           closeMobileBuy,
+          id,
         })}
 
         {paginationState.hasMore && (
@@ -352,5 +322,10 @@ const Products = () => {
 
 export default Products;
 
-
-
+export const getCollectionData = async ({ params }: LoaderFunctionArgs) => {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const id: string = params.id!;
+  const snapshot = await fetchCollection<Product>(id, null, null);
+  const productsData = snapshot.docs.map((doc) => doc.data());
+  return productsData as Product[];
+};

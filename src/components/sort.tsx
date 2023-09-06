@@ -1,48 +1,44 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
+import { SORT_LABELS, SORT_OPTIONS } from '../constants/sort';
+
 import styles from './sort.module.scss';
 
-const sortInterface = {
-  lowToHigh: ['price', 'asc'],
-  highToLow: ['price', 'desc'],
-  'A-Z': ['name', 'asc'],
-  'Z-A': ['name', 'desc'],
-  default: ['id', 'asc'],
-};
-
-interface sortProps {
-  change: (sortOption: [string, string]) => void;
-  sortOption: string | null;
-}
-
-const SortMenu: React.FC<sortProps> = ({ change, sortOption }) => {
-  const selectInput = useRef<HTMLSelectElement>(null);
+const SortMenu: React.FC = () => {
+  const [sort, setSort] = useState<keyof typeof SORT_OPTIONS>('default');
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    //I am sure that the selectInput is not null
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const select = selectInput.current!;
-    if (sortOption) {
-      select.value = sortOption;
-    }
-  }, [sortOption]);
+    const params = new URLSearchParams(location.search);
+    const sortParam = params.get('sort') as keyof typeof SORT_OPTIONS;
+
+    setSort(sortParam || 'default');
+  }, [location.search]);
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    const sortOption = sortInterface[value as keyof typeof sortInterface];
-    change(sortOption as [string, string]);
+    const value = e.target?.value as
+      | keyof typeof SORT_OPTIONS
+      | null
+      | undefined;
+
+    if (value) {
+      setSort(value);
+      const params = new URLSearchParams(location.search);
+      params.set('sort', value);
+      navigate({
+        search: params.toString(),
+      });
+    }
   };
 
   return (
-    <select
-      className={styles.select_menu}
-      onChange={onChangeHandler}
-      ref={selectInput}
-    >
-      <option value="default">Sort By</option>
-      <option value="lowToHigh">Price: Low to High</option>
-      <option value="highToLow">Price: High to Low</option>
-      <option value="A-Z">Name: A-Z</option>
-      <option value="Z-A">Name: Z-A</option>
+    <select className={styles.select_menu} onChange={onChangeHandler}>
+      {Object.keys(SORT_OPTIONS).map((key) => (
+        <option key={key} value={key} selected={key == sort}>
+          {SORT_LABELS[key as keyof typeof SORT_LABELS]}
+        </option>
+      ))}
     </select>
   );
 };

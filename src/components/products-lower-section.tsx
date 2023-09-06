@@ -119,6 +119,7 @@ const ProductLowerSection = (props: ProductLowerSectionProps) => {
                 product={product}
                 selection={selection}
                 handleSelect={handleSelect}
+                id={id}
               />
             </div>
 

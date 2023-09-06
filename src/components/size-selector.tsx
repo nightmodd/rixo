@@ -8,12 +8,6 @@ import styles from './size-selector.module.scss';
 import classes from '../routes/products.module.scss';
 import clsx from 'clsx';
 
-interface SizesSelectorProps {
-  product: Product;
-  selection: Selection | null;
-  handleSelect: MouseEventHandler<HTMLButtonElement>;
-}
-
 export const getCardQuantityLabel = (quantity: number) => {
   if (quantity === 0) {
     return 'Out of stock';
@@ -23,24 +17,23 @@ export const getCardQuantityLabel = (quantity: number) => {
     return 'In Stock';
   }
 };
+interface SizesSelectorProps {
+  id: string;
+  product: Product;
+  selection: Selection | null;
+  handleSelect: MouseEventHandler<HTMLButtonElement>;
+}
 
-const SizesSelector = ({
-  product,
-  selection,
-  handleSelect,
-}: SizesSelectorProps) => {
-  let counter = 0;
-
-  console.log(product.sizes);
+const SizesSelector = (props: SizesSelectorProps) => {
+  const { id, product, selection, handleSelect } = props;
   return (
     <div className={classes.hover_animation} data-id={product.id}>
       <div className={classes.product_sizes}>
-        {product.sizes.map((size) => {
-          counter++;
+        {product.sizes.map((size, index) => {
           return (
             <button
               onClick={handleSelect}
-              key={`${product.id}-${size.value}`}
+              key={`${product.id}-${size.value}-${index}`}
               className={clsx({
                 [styles.size]: true,
                 [styles.unavilable]: Number(size.quantity) === 0,
@@ -86,7 +79,7 @@ const SizesSelector = ({
               })}
             ></span>
             <Link
-              to={'/'}
+              to={`/collections/${id}/${product.id}`}
               className={clsx({
                 [styles.low_stock]:
                   selection?.quantity < 3 && selection?.quantity !== 0,

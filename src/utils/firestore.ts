@@ -12,15 +12,19 @@ import {
 //import { AppliedFilter } from '../components/applied-filter';
 
 import { db } from '../config/firebase-config';
+import { SORT_OPTIONS } from '../constants/sort';
 
 export const fetchCollection = async <Type>(
   id: string,
   cursor: QueryDocumentSnapshot<Type> | null,
-  order: Array<any> | null
+  orderKey: keyof typeof SORT_OPTIONS | null
   //filters: Array<AppliedFilter> | null
 ): Promise<QuerySnapshot<Type>> => {
-  const clauses2 = order ? orderBy(order[0], order[1]) : orderBy('id');
-  const clauses3 = cursor ? [startAfter(cursor)] : [];
+  const order = orderKey ? SORT_OPTIONS[orderKey] : null;
+  const sort = order
+    ? orderBy(order[0], order[1])
+    : orderBy('id');
+  const pagination = cursor ? [startAfter(cursor)] : [];
   /*   const clauses =
     filters?.map((filter) => {
       where(filter.filterType, '==', filter.value);
@@ -29,8 +33,8 @@ export const fetchCollection = async <Type>(
   const resolvedQuery = query<Type>(
     collection(db, id) as Query<Type>,
     // ...clauses,
-    clauses2,
-    ...clauses3,
+    sort,
+    ...pagination,
     limit(10)
   );
 
