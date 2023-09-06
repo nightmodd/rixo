@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+
 import { auth } from '../config/firebase-config';
 import {
   createUserWithEmailAndPassword,
@@ -35,6 +36,7 @@ interface AuthContextProviderProps {
 }
 export const AuthContextProvider = (props: AuthContextProviderProps) => {
   const [currentUser, setCurrentUser] = useState<any>('');
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -50,7 +52,18 @@ export const AuthContextProvider = (props: AuthContextProviderProps) => {
 
   const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
+    signInWithPopup(auth, provider)
+      .then(async (result) => {
+        const user = result.user;
+        if (user) {
+          setCurrentUser(user.email);
+        }
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
   };
 
   const checkEmailExists = async (email: string) => {

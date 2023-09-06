@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { ZodType, z } from 'zod';
@@ -17,9 +17,16 @@ type FormData = {
 
 const LoginForm: React.FC = () => {
   const [, setErrorMessage] = useState<string>('');
+  const [googleSingin, setGoogleSingin] = useState<boolean>(false);
   const navigate = useNavigate();
-  const { signin, googleSignIn } = useContext(AuthContext);
+  const { signin, googleSignIn, currentUser } = useContext(AuthContext);
 
+  useEffect(() => {
+    if (googleSingin && currentUser) {
+      navigate('/');
+      setGoogleSingin(false);
+    }
+  }, [googleSingin, currentUser, navigate]);
   //using zod for validation
   const schema: ZodType<FormData> = z.object({
     email: z.string().email('Please enter a valid email address'),
@@ -44,8 +51,8 @@ const LoginForm: React.FC = () => {
 
   const signinWithGoogle = async () => {
     try {
-      await googleSignIn();
-      navigate('/');
+      setGoogleSingin(true);
+      googleSignIn();
     } catch (error: any) {
       setErrorMessage(error.message);
     }
@@ -54,8 +61,10 @@ const LoginForm: React.FC = () => {
   const submitHandler = async (data: FormData) => {
     try {
       setErrorMessage('');
-      await signin(data.email, data.password);
-      navigate('/');
+      signin(data.email, data.password);
+      setTimeout(() => {
+        navigate('/');
+      }, 800);
     } catch (error: any) {
       setErrorMessage(error.message);
       alert('Invalid email or password');
