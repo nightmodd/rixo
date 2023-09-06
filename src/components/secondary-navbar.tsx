@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import AuthContext from '../context/auth-context';
 import bag from '../assets/shopping-bag.svg';
 import person from '../assets/person.svg';
 import styles from './secondary-navbar.module.scss';
 
 const SenondaryNavigation = () => {
   const [personNavigation, setPersonNavigation] = useState(false);
+  const { currentUser, logout } = useContext(AuthContext);
 
   const activePersonNavigation = () => {
     setPersonNavigation(true);
@@ -28,9 +30,17 @@ const SenondaryNavigation = () => {
           <img src={person} alt="person logo" />
           {personNavigation && (
             <ul>
-              <li>
-                <Link to="/login">Log In</Link>
-              </li>
+              {currentUser ? (
+                <li>
+                  <Link to="/login" onClick={logout}>
+                    Log Out
+                  </Link>
+                </li>
+              ) : (
+                <li>
+                  <Link to="/login">Log In</Link>
+                </li>
+              )}
               <li>
                 <Link to="/Register">Sign Up</Link>
               </li>

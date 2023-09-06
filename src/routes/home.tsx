@@ -13,21 +13,20 @@ const HomePage: React.FC = () => {
 
   currentUser ? (comingUser = currentUser) : (comingUser = 'Guest');
 
-  const logginOut = async () => {
+  const logOut = async () => {
     try {
-      await logout();
-      navigate('/Login');
+      logout();
+      navigate('/login');
     } catch (error: any) {
       alert(error.message);
     }
   };
-  console.log(currentUser);
 
   return (
     <div className={styles.container}>
       <h1>Home</h1>
       <p>Welcome {comingUser}</p>
-      {currentUser && <Button onClick={logginOut}> Logout </Button>}
+      {currentUser && <Button onClick={logOut}> Logout </Button>}
     </div>
   );
 };
