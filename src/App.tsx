@@ -6,7 +6,9 @@ import HomePage from './routes/home';
 import LoginPage from './routes/login';
 import RegisterPage from './routes/register';
 import Products from './routes/products';
+
 import Product, { getProductData } from './routes/product';
+
 
 const router = createBrowserRouter([
   {
@@ -27,11 +29,13 @@ const router = createBrowserRouter([
         path: '/collections/:id',
         element: <Products />,
       },
+
       {
         path: '/collections/:id/:title',
         element: <Product />,
         loader: getProductData,
       },
+
     ],
   },
 ]);
