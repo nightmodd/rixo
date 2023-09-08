@@ -51,8 +51,10 @@ const LoginForm: React.FC = () => {
 
   const signinWithGoogle = async () => {
     try {
-      setGoogleSingin(true);
       googleSignIn();
+      setTimeout(() => {
+        setGoogleSingin(true);
+      }, 800);
     } catch (error: any) {
       setErrorMessage(error.message);
     }
