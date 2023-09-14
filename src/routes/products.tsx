@@ -5,7 +5,6 @@ import {
   useCallback,
   MouseEventHandler,
 } from 'react';
-import { useLocation } from 'react-router';
 import { useParams, useLoaderData, LoaderFunctionArgs } from 'react-router-dom';
 
 import SortMenu from '../components/sort';
@@ -14,9 +13,14 @@ import ProductLowerSection from '../components/products-lower-section';
 import ProductsMobileBuy from '../components/products-mobile-buy';
 import LoadingAnimation from '../components/loading-animation';
 import ProductsMobileFilters from '../components/products-mobile-filters';
-
 import { AppliedFilter } from '../components/applied-filter';
-import { PaginationState, Product, Size } from '../types/listing';
+
+import {
+  PaginationState,
+  Product,
+  Size,
+  PaginationFirstState,
+} from '../types/listing';
 import { fetchCollection } from '../utils/firestore';
 
 import styles from './products.module.scss';
@@ -32,7 +36,6 @@ const Products = () => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const id = params.id!;
 
-  const prevId = useRef<string>('');
   const backdropMobile = useRef<HTMLDivElement>(null);
   const loadingAnimation = useRef<HTMLDivElement>(null);
 
@@ -54,33 +57,23 @@ const Products = () => {
     cursor: null,
   });
 
-  const data = useLoaderData() as Product[];
-  console.log(data);
-  const location = useLocation();
+  const firstPaginationState = useLoaderData() as PaginationFirstState<Product>;
 
-  //getting data from firestore
-  const fetchData = useCallback(
+  //for first fetch
+  useEffect(() => {
+    setPaginationState(firstPaginationState);
+    setSortBy(firstPaginationState.sort);
+  }, [id, firstPaginationState]);
+
+  // infinite scroll
+  const fetchMoreData = useCallback(
     async (
       id: string,
       cursor: PaginationState<Product>['cursor'],
       order: keyof typeof SORT_OPTIONS | null
     ) => {
-      const revalidate = prevId.current !== id;
-
-      prevId.current = id;
-
       const snapshot = await fetchCollection<Product>(id, cursor, order);
       const docs = snapshot.docs.map((doc) => doc.data());
-
-      if (revalidate) {
-        setActiveFilters(null);
-        setSortBy(null);
-        return setPaginationState({
-          data: [...docs],
-          hasMore: docs.length > 0,
-          cursor: snapshot.docs[snapshot.docs.length - 1],
-        });
-      }
 
       setPaginationState((prev) => ({
         data: [...prev.data, ...docs],
@@ -92,21 +85,6 @@ const Products = () => {
   );
 
   useEffect(() => {
-    if (prevId.current !== id) {
-      setPaginationState({
-        data: [],
-        hasMore: true,
-        cursor: null,
-      });
-    }
-  }, [id]);
-
-  useEffect(() => {
-    fetchData(id, null, sortBy);
-  }, [fetchData, id, sortBy]);
-
-  // infinite scroll
-  useEffect(() => {
     const loading = loadingAnimation.current;
     if (loading === null) return;
 
@@ -114,7 +92,7 @@ const Products = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            fetchData(id, paginationState.cursor, sortBy);
+            fetchMoreData(id, paginationState.cursor, sortBy);
           }
         });
       },
@@ -128,30 +106,7 @@ const Products = () => {
     return () => {
       observer.disconnect();
     };
-  }, [fetchData, id, paginationState.cursor, sortBy]);
-
-  //getting sort from url
-  useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const sort = searchParams.get('sort');
-    if (sort) {
-      if (sort === 'lowToHigh') {
-        setSortBy('lowToHigh');
-      }
-      if (sort === 'highToLow') {
-        setSortBy('highToLow');
-      }
-      if (sort === 'A-Z') {
-        setSortBy('A-Z');
-      }
-      if (sort === 'Z-A') {
-        setSortBy('Z-A');
-      }
-      if (sort === 'default') {
-        setSortBy('default');
-      }
-    }
-  }, [location]);
+  }, [fetchMoreData, paginationState.cursor, sortBy, id]);
 
   //handlers  for the desktop version
   const mouseLeave = () => {
@@ -322,10 +277,21 @@ const Products = () => {
 
 export default Products;
 
-export const getCollectionData = async ({ params }: LoaderFunctionArgs) => {
+export const getCollectionData = async ({
+  params,
+  request,
+}: LoaderFunctionArgs) => {
+  const url = new URL(request.url);
+  const sort = url.searchParams.get('sort') as keyof typeof SORT_OPTIONS | null;
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const id: string = params.id!;
-  const snapshot = await fetchCollection<Product>(id, null, null);
-  const productsData = snapshot.docs.map((doc) => doc.data());
-  return productsData as Product[];
+  const snapshot = await fetchCollection<Product>(id, null, sort);
+
+  const docs = snapshot.docs.map((doc) => doc.data());
+  return {
+    data: docs,
+    hasMore: docs.length > 0,
+    cursor: snapshot.docs[snapshot.docs.length - 1],
+    sort: sort,
+  } as PaginationFirstState<Product>;
 };
