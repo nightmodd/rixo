@@ -10,11 +10,12 @@ interface InputProps extends React.ComponentPropsWithoutRef<'input'> {
 }
 
 const Input: React.FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, id, error, touched, ...props }, ref) => {
+  ({ label, id, error, touched, placeholder = '', ...props }, ref) => {
     return (
       <>
         <div className={styles.input_container}>
           <input
+            placeholder={placeholder}
             id={id}
             className={clsx([
               error && styles.error,

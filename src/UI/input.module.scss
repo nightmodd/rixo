@@ -19,7 +19,7 @@
     transition: all 0.3s ease-in-out;
 
     &:focus + label,
-    &:user-valid + label {
+    &:not(:placeholder-shown) + label {
       font-size: 0.55rem;
       top: 0.4rem;
       margin-bottom: 0.5rem;
