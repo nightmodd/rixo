@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { SORT_LABELS, SORT_OPTIONS } from '../constants/sort';
 
@@ -33,9 +33,13 @@ const SortMenu: React.FC = () => {
   };
 
   return (
-    <select className={styles.select_menu} onChange={onChangeHandler}>
+    <select
+      className={styles.select_menu}
+      onChange={onChangeHandler}
+      value={sort}
+    >
       {Object.keys(SORT_OPTIONS).map((key) => (
-        <option key={key} value={key} selected={key == sort}>
+        <option key={key} value={key}>
           {SORT_LABELS[key as keyof typeof SORT_LABELS]}
         </option>
       ))}
