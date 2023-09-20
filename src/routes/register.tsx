@@ -62,8 +62,9 @@ const RegisterForm: React.FC = () => {
   const submitHandler = async (data: FormData) => {
     try {
       setErrorMessage('');
-      await signup(data.email, data.password, data);
-      navigate('/');
+      await signup(data.email, data.password, data.name).then(() => {
+        navigate('/');
+      });
     } catch (error: any) {
       setErrorMessage(error.message);
       alert(error.message);

@@ -51,8 +51,8 @@ const LoginForm: React.FC = () => {
 
   const signinWithGoogle = async () => {
     try {
+      await googleSignIn();
       setGoogleSingin(true);
-      googleSignIn();
     } catch (error: any) {
       setErrorMessage(error.message);
     }
@@ -61,10 +61,9 @@ const LoginForm: React.FC = () => {
   const submitHandler = async (data: FormData) => {
     try {
       setErrorMessage('');
-      signin(data.email, data.password);
-      setTimeout(() => {
+      await signin(data.email, data.password).then(() => {
         navigate('/');
-      }, 800);
+      });
     } catch (error: any) {
       setErrorMessage(error.message);
       alert('Invalid email or password');
