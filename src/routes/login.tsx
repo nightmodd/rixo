@@ -61,8 +61,9 @@ const LoginForm: React.FC = () => {
   const submitHandler = async (data: FormData) => {
     try {
       setErrorMessage('');
-      await signin(data.email, data.password);
-      navigate('/');
+      await signin(data.email, data.password).then(() => {
+        navigate('/');
+      });
     } catch (error: any) {
       setErrorMessage(error.message);
       alert('Invalid email or password');
