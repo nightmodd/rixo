@@ -31,19 +31,26 @@ const SenondaryNavigation = () => {
           {personNavigation && (
             <ul>
               {currentUser ? (
-                <li>
-                  <Link to="/login" onClick={logout}>
-                    Log Out
-                  </Link>
-                </li>
+                <>
+                  <li>
+                    <Link to="/profile">{currentUser}</Link>
+                  </li>
+                  <li>
+                    <Link to="/login" onClick={logout}>
+                      Log Out
+                    </Link>
+                  </li>
+                </>
               ) : (
-                <li>
-                  <Link to="/login">Log In</Link>
-                </li>
+                <>
+                  <li>
+                    <Link to="/login">Log In</Link>
+                  </li>
+                  <li>
+                    <Link to="/Register">Sign Up</Link>
+                  </li>
+                </>
               )}
-              <li>
-                <Link to="/Register">Sign Up</Link>
-              </li>
             </ul>
           )}
         </li>

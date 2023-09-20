@@ -152,23 +152,32 @@ const MobileNavbar = (props: MobileNavbarProps) => {
         </div>
         <ul className={styles.user_navigation_list}>
           {currentUser ? (
-            <li>
-              <Link to={'/login'} onClick={logOut}>
-                Log Out
-              </Link>
-            </li>
+            <>
+              <li>
+                <Link to={'/profile'} onClick={closeAll}>
+                  {currentUser}
+                </Link>
+              </li>
+              <li>
+                <Link to={'/login'} onClick={logOut}>
+                  Log Out
+                </Link>
+              </li>
+            </>
           ) : (
-            <li>
-              <Link to={'/login'} onClick={closeAll}>
-                Log In
-              </Link>
-            </li>
+            <>
+              <li>
+                <Link to={'/login'} onClick={closeAll}>
+                  Log In
+                </Link>
+              </li>
+              <li>
+                <Link to={'/Register'} onClick={closeAll}>
+                  Sign Up
+                </Link>
+              </li>
+            </>
           )}
-          <li>
-            <Link to={'/Register'} onClick={closeAll}>
-              Sign Up
-            </Link>
-          </li>
         </ul>
       </ul>
     </nav>
