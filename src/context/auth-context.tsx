@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { auth } from '../config/firebase-config';
 import {
@@ -8,7 +8,6 @@ import {
   fetchSignInMethodsForEmail,
   GoogleAuthProvider,
   signInWithPopup,
-  onAuthStateChanged,
   updateProfile,
 } from 'firebase/auth';
 
