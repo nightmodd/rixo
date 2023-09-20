@@ -105,7 +105,9 @@ export const AuthContextProvider = (props: AuthContextProviderProps) => {
   };
 
   const logout = async () => {
-    return signOut(auth);
+    return signOut(auth).then(() => {
+      setCurrentUser(null);
+    });
   };
 
   const value = {
