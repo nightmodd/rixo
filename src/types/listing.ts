@@ -1,4 +1,5 @@
 import { QueryDocumentSnapshot } from 'firebase/firestore';
+import { SORT_OPTIONS } from '../constants/sort';
 
 export interface Category {
   name: string;
@@ -52,4 +53,11 @@ export interface PaginationState<Type> {
   data: Type[];
   hasMore: boolean;
   cursor: QueryDocumentSnapshot<Type> | null;
+}
+
+export interface PaginationFirstState<Type> {
+  data: Type[];
+  hasMore: boolean;
+  cursor: QueryDocumentSnapshot<Type> | null;
+  sort: keyof typeof SORT_OPTIONS | null;
 }

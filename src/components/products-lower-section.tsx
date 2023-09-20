@@ -92,10 +92,10 @@ const ProductLowerSection = (props: ProductLowerSectionProps) => {
         />
       </div>
       <div className={`${styles.products_section} ${styles.grid_4} `}>
-        {paginationState.data.map((product) => (
+        {paginationState.data.map((product, index) => (
           <div
             className={styles.product_card}
-            key={product.id}
+            key={`${product.id}-${index}`}
             data-id={product.id}
             onMouseLeave={mouseLeave}
           >
