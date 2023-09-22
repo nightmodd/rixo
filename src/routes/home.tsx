@@ -1,34 +1,79 @@
-import { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import AuthContext from '../context/auth-context';
+import React, { useState, useEffect } from 'react';
+import { Link, useLoaderData } from 'react-router-dom';
 
-import Button from '../UI/button';
+import { HomeSubHero } from '../types/listing';
+
+import { db } from '../config/firebase-config';
+import {
+  collection,
+  query,
+  getDocs,
+  Query,
+  QueryDocumentSnapshot,
+} from 'firebase/firestore';
 
 import styles from './home.module.scss';
 
+const SubHero = (item: HomeSubHero) => {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  let renderedImg = '';
+  if (windowWidth > 760) {
+    renderedImg = item.imgs[0];
+  } else {
+    renderedImg = item.imgs[1];
+  }
+
+  return (
+    <div className={styles.subhero_card}>
+      <img src={renderedImg} alt={item.id} />
+      <div className={styles.inner_subhero}>
+        <span className={styles.subhero_title}>{item.title}</span>
+        <button>
+          <Link to={`/collections/${item.id}`}>
+            <span>Shop Now</span>
+          </Link>
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const HomePage: React.FC = () => {
-  const { currentUser, logout } = useContext(AuthContext);
-  const navigate = useNavigate();
-  let comingUser: string;
-
-  currentUser ? (comingUser = currentUser) : (comingUser = 'Guest');
-
-  const logOut = async () => {
-    try {
-      logout();
-      navigate('/login');
-    } catch (error: any) {
-      alert(error.message);
-    }
-  };
+  const subHeroData = useLoaderData() as HomeSubHero[];
 
   return (
     <div className={styles.container}>
-      <h1>Home</h1>
-      <p>Welcome {comingUser}</p>
-      {currentUser && <Button onClick={logOut}> Logout </Button>}
+      <SubHero {...subHeroData[0]} />
+      <SubHero {...subHeroData[1]} />
+      <SubHero {...subHeroData[2]} />
     </div>
   );
 };
 
 export default HomePage;
+
+export const getData = async () => {
+  const resolvedQuery = query(collection(db, 'home') as Query);
+  const querySnapshot = await getDocs(resolvedQuery);
+  const data = querySnapshot.docs.map((doc: QueryDocumentSnapshot) => {
+    return {
+      id: doc.id,
+      ...doc.data(),
+    };
+  });
+
+  return data as HomeSubHero[];
+};

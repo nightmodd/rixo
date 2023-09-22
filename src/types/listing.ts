@@ -61,3 +61,9 @@ export interface PaginationFirstState<Type> {
   cursor: QueryDocumentSnapshot<Type> | null;
   sort: keyof typeof SORT_OPTIONS | null;
 }
+
+export interface HomeSubHero {
+  id: string;
+  imgs: Array<string>;
+  title: string;
+}
