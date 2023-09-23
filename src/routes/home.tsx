@@ -65,8 +65,8 @@ const HomePage: React.FC = () => {
 
 export default HomePage;
 
-export const getData = async () => {
-  const resolvedQuery = query(collection(db, 'home') as Query);
+const fetchData = async (fetchedData: string) => {
+  const resolvedQuery = query(collection(db, fetchedData) as Query);
   const querySnapshot = await getDocs(resolvedQuery);
   const data = querySnapshot.docs.map((doc: QueryDocumentSnapshot) => {
     return {
@@ -75,5 +75,10 @@ export const getData = async () => {
     };
   });
 
+  return data as HomeSubHero[];
+};
+
+export const getData = async () => {
+  const data = await fetchData('home');
   return data as HomeSubHero[];
 };
