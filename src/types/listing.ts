@@ -67,3 +67,15 @@ export interface HomeSubHero {
   imgs: Array<string>;
   title: string;
 }
+
+export interface HomeSection {
+  id: string;
+  img: string;
+  title: string;
+  description: string;
+}
+
+export interface HomeData {
+  subHeroData: Array<HomeSubHero>;
+  sectionsData: Array<HomeSection>;
+}
