@@ -1,6 +1,8 @@
+import React, { useState, useEffect } from 'react';
 import { useLoaderData } from 'react-router-dom';
 
-import { HomeData } from '../types/listing';
+import { HomeData, HomeSection, HomeSubHero } from '../types/listing';
+import LoadingAnimation from '../components/loading-animation';
 import SubHero from '../components/home-components/sub-hero';
 import AvailableSections from '../components/home-components/avilable-sections';
 
@@ -17,17 +19,36 @@ import styles from './home.module.scss';
 
 //home page
 const HomePage: React.FC = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [subHeroData, setSubHeroData] = useState<Array<HomeSubHero>>([]);
+  const [sectionsData, setSectionsData] = useState<Array<HomeSection>>([]);
   const homeData = useLoaderData() as HomeData;
 
-  const subHeroData = homeData.subHeroData;
-  const sectionsData = homeData.sectionsData;
+  useEffect(() => {
+    setTimeout(() => {
+      if (homeData) {
+        setSubHeroData(homeData.subHeroData);
+        setSectionsData(homeData.sectionsData);
+      }
+      setIsLoading(false);
+    }, 500);
+
+    return () => {
+      setIsLoading(true);
+    };
+  }, [homeData]);
 
   return (
     <div className={styles.container}>
-      <SubHero {...subHeroData[0]} />
-      <AvailableSections sections={sectionsData} />
-      <SubHero {...subHeroData[1]} />
-      <SubHero {...subHeroData[2]} />
+      {isLoading && <LoadingAnimation />}
+      {!isLoading && (
+        <>
+          <SubHero {...subHeroData[0]} />
+          <AvailableSections sections={sectionsData} />
+          <SubHero {...subHeroData[1]} />
+          <SubHero {...subHeroData[2]} />
+        </>
+      )}
     </div>
   );
 };
