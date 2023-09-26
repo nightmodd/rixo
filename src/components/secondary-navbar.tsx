@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../context/auth-context';
-import bag from '../assets/shopping-bag.svg';
+import cart from '../assets/cart.svg';
 import person from '../assets/person.svg';
 import styles from './secondary-navbar.module.scss';
 
@@ -27,35 +27,39 @@ const SenondaryNavigation = () => {
           onMouseEnter={activePersonNavigation}
           onMouseLeave={deactivePersonNavigation}
         >
-          <img src={person} alt="person logo" />
-          {personNavigation && (
-            <ul>
-              {currentUser ? (
-                <>
-                  <li>
-                    <Link to="/profile">{currentUser}</Link>
-                  </li>
-                  <li>
-                    <Link to="/login" onClick={logout}>
-                      Log Out
-                    </Link>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li>
-                    <Link to="/login">Log In</Link>
-                  </li>
-                  <li>
-                    <Link to="/Register">Sign Up</Link>
-                  </li>
-                </>
-              )}
-            </ul>
-          )}
+          <button>
+            <img src={person} alt="person logo" />
+            {personNavigation && (
+              <ul>
+                {currentUser ? (
+                  <>
+                    <li>
+                      <Link to="/profile">{currentUser}</Link>
+                    </li>
+                    <li>
+                      <Link to="/login" onClick={logout}>
+                        Log Out
+                      </Link>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    <li>
+                      <Link to="/login">Log In</Link>
+                    </li>
+                    <li>
+                      <Link to="/Register">Sign Up</Link>
+                    </li>
+                  </>
+                )}
+              </ul>
+            )}
+          </button>
         </li>
         <li className={styles.header_icon}>
-          <img src={bag} alt="bag logo" />
+          <button>
+            <img src={cart} alt="bag logo" />
+          </button>
         </li>
       </ul>
     </div>
