@@ -13,7 +13,7 @@
   width: 100%;
   max-width: 1580px;
   margin: auto;
-  margin-top: 6rem;
+  margin-top: 8.5rem;
   display: flex;
   flex-direction: column;
 }
@@ -270,7 +270,7 @@
 }
 @media screen and (max-width: 62.5rem) {
   .main_content {
-    margin-top: 2rem;
+    margin-top: 5rem;
   }
   .product_sizes {
     padding: 0.5rem;
@@ -432,9 +432,6 @@
     i {
       font-size: 0.8rem;
     }
-  }
-  .main_content {
-    margin-top: 5rem;
   }
   .header_right {
     display: none;
