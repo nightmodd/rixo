@@ -15,14 +15,25 @@
 }
 .header_icon {
   position: relative;
+  button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    text-align: left;
+  }
   img {
     width: 1.5rem;
     height: 1.5rem;
     cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+      transform: scale(1.2);
+    }
   }
   ul {
     position: absolute;
-    top: 1.6rem;
+    top: 1.7rem;
     right: -2rem;
     width: 12rem;
     display: flex;
@@ -35,7 +46,7 @@
     z-index: 60;
     li {
       width: 100%;
-   
+
       cursor: pointer;
       &:hover {
         background-color: rgba(211, 149, 98, 0.662);
