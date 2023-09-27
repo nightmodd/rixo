@@ -1,5 +1,5 @@
 import React from 'react';
-import MainNavigation from '../components/navbar';
+import MainNavigation from '../components/navbar-components/navbar';
 
 import styles from './error.module.scss';
 
