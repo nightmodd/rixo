@@ -2,7 +2,7 @@ import { useContext, MouseEventHandler } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../context/auth-context';
 import { DropdownLink } from './navbar';
-import bag from '../assets/shopping-bag.svg';
+import cart from '../assets/cart.svg';
 
 import styles from './navbar.module.scss';
 import clsx from 'clsx';
@@ -48,7 +48,7 @@ const MobileNavbar = (props: MobileNavbarProps) => {
             console.log('bag');
           }}
         >
-          <img src={bag} alt="shopping bag" />
+          <img src={cart} alt="shopping bag" />
         </button>
         <button className={styles.hamburger} onClick={toggleMobileMenu}>
           {showMobileMenu === true ? (
