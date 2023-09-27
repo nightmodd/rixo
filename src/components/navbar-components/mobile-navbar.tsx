@@ -1,8 +1,8 @@
 import { useContext, MouseEventHandler } from 'react';
 import { Link } from 'react-router-dom';
-import AuthContext from '../context/auth-context';
+import AuthContext from '../../context/auth-context';
 import { DropdownLink } from './navbar';
-import cart from '../assets/cart.svg';
+import cart from '../../assets/cart.svg';
 
 import styles from './navbar.module.scss';
 import clsx from 'clsx';
