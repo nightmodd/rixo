@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import MainNavigation from '../components/navbar';
+import MainNavigation from '../components/navbar-components/navbar';
 
 import styles from './error.module.scss';
 

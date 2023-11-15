@@ -1,8 +1,8 @@
 import { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import AuthContext from '../context/auth-context';
-import cart from '../assets/cart.svg';
-import person from '../assets/person.svg';
+import AuthContext from '../../context/auth-context';
+import cart from '../../assets/cart.svg';
+import person from '../../assets/person.svg';
 import styles from './secondary-navbar.module.scss';
 
 const SenondaryNavigation = () => {
